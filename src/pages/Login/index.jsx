@@ -1,33 +1,67 @@
 import React, { useState } from 'react'
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 const Login = () => {
+    const navigate = useNavigate();
     const [phone, setPhone] = useState("");
     const [password,setPassword] = useState("");
+    const [loadingapi, setLoadingAPI] = useState(false);
     const loginapi = (phone,password) => {  
         return axios.post('https://localhost:7139/api/Login',{phone,password});
     }
+    const {loginContext} = useContext(UserContext);
+   useEffect(() => {
+      let token = localStorage.getItem('token');
+      if(token) {
+        navigate("/users")
+      }
+   },[])
     const handleLogin = async () => {
-        alert("Waiting for"); 
-
+      setLoadingAPI(true);
   try {
     // Gọi hàm loginapi và đợi kết quả
     const response = await loginapi(phone, password);
-
     // Lấy token từ response
     const token = response.data.token;
 
     // Lưu token vào Local Storage
-    localStorage.setItem('token', token);
-
+    loginContext(phone,token)
+    navigate("/users")
     // In ra console để kiểm tra
-    console.log("Login successful. Token:", token);
+    toast.success('Đăng nhập thành công', {
+      position: 'top-right',
+      autoClose: 3000, // Đóng thông báo sau 3 giây
+      hideProgressBar: false,
+      
+  });
   } catch (error) {
-    // Xử lý lỗi, ví dụ:
-    console.error("Login failed:", error.message);
+    if (error.response) {
+      toast.error('Nhập sai tài khoản hoặc mật khẩu vui lòng nhập lại', {
+        position: 'top-right',
+        autoClose: 3000, // Đóng thông báo sau 3 giây
+        hideProgressBar: false,
+    });
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser 
+      // and an instance of http.ClientRequest in node.js
+      console.log(error.request);
+    } else {
+      console.log('Error', error.message);
+    }
+    
   }
+  setLoadingAPI(false);
     };
     return (
-       <div className="bg-no-repeat bg-cover bg-center relative" style={{backgroundImage: 'url(https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1951&q=80)'}}><div className="absolute bg-gradient-to-b from-green-500 to-green-400 opacity-75 inset-0 z-0" />
+       <div className="bg-no-repeat bg-cover bg-center relative" ><div className="absolute bg-gradient-to-b from-green-500 to-green-400 opacity-75 inset-0 z-0" />
   <div className="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
     <div className="flex-col flex  self-center p-10 sm:max-w-5xl xl:max-w-2xl  z-10">
       <div className="self-start hidden lg:flex flex-col  text-white">
@@ -73,9 +107,10 @@ const Login = () => {
             </div>
           </div>
           <div>
-            <button type="submit" className="w-full flex justify-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+            <button type="submit" className="w-full flex gap-2 justify-center items-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
             onClick={() => handleLogin()}>
-              Đăng nhập
+              {loadingapi &&  <i class="fas fa-circle-notch fa-spin"></i> }
+               Đăng nhập
             </button>
           </div>
         </div>
