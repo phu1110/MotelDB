@@ -10,7 +10,7 @@ function DashboardHeader ({ btnText, onClick }) {
             {btnText && 
                 <button className='dashbord-header-btn' onClick={onClick}>{btnText}</button>
             }
-
+    
             <div className='dashbord-header-right'>
                 <img 
                     src={NotificationIcon}

@@ -13,8 +13,8 @@ const sidebar_menu = [
     {
         id: 2,
         icon: ProductIcon,
-        path: '/orders',
-        title: 'Orders',
+        path: '/users',
+        title: 'Users',
     },
     {
         id: 3,
@@ -27,6 +27,18 @@ const sidebar_menu = [
         icon: UserIcon,
         path: '/profile',
         title: 'My account',
+    },
+    {
+        id: 5,
+        icon: UserIcon,
+        path: '/login',
+        title: 'Login',
+    },
+    {
+        id: 6,
+        icon: UserIcon,
+        path: '/register',
+        title: 'Register',
     }
 ]
 
