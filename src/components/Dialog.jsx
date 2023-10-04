@@ -11,17 +11,17 @@ function EditDialog({ open, handleClose, rowData }) {
   const [post, setPost] = React.useState(null);
   const [editedData, setEditedData] = useState(rowData);
   const handleSave = async () => {
-    // try {
-    //   if (editedData) {
-    //     const updateddata = {title: editedData.title, address : editedData.address,description: editedData.description, price: editedData.price, area:editedData.area, isHire:editedData.isHire }; // Modify data as needed
-    //     await updateData(editedData.title, editedData.description, editedData.address);
-    //     console.log('blabla', updateData);
-    //     handleClose();
-    //   }
-    // } catch (error) {
-    //   console.error('Error updating data:', error);
-    //   // Handle error (e.g., show an error message)
-    // }
+    try {
+      if (editedData) {
+        const updateddata = {title: editedData.title, address : editedData.address,description: editedData.description, price: editedData.price, area:editedData.area, isHire:editedData.isHire, status : editedData.status}; // Modify data as needed
+        await updateData(editedData.id, updateddata);
+        console.log('Thành Công', updateData);
+        handleClose();
+      }
+    } catch (error) {
+      console.error('Error updating data:', error);
+      // Handle error (e.g., show an error message)
+    }
   };
 
   return (

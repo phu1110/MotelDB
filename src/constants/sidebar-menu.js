@@ -13,8 +13,8 @@ const sidebar_menu = [
     {
         id: 2,
         icon: ProductIcon,
-        path: '/orders',
-        title: 'Orders',
+        path: '/posts',
+        title: 'Posts',
     },
     {
         id: 3,

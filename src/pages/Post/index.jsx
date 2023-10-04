@@ -49,7 +49,6 @@ function Orders() {
                 console.error('Error fetching data:', error);
             });
     }, []);
-    const hostUrl = 'https://localhost:7139/';
     const buttons = [
         {
           text: 'New Post',
@@ -80,7 +79,6 @@ function Orders() {
       };
     return (
         <div className='dashboard-content'>
-            <Navigate></Navigate>
             <DashboardHeader
                 buttons={buttons} />
             <div className='dashboard-content-container'>

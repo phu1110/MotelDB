@@ -5,7 +5,7 @@ import SideBar from './components/Sidebar';
 import sidebar_menu from './constants/sidebar-menu';
 
 import './App.css';
-import Orders from './pages/Orders';
+import Post from './pages/Post';
 
 function App () {
   return(
@@ -17,7 +17,7 @@ function App () {
               <Routes>
                   <Route path="*" element={<div></div>} />
                   <Route exact path="/" element={<div></div>} />
-                  <Route exact path="/orders" element={< Orders/>} />
+                  <Route exact path="/posts" element={<Post/>} />
                   <Route exact path="/locations" element={<div></div>} />
                   <Route exact path="/profile" element={<div></div>} />
               </Routes>
