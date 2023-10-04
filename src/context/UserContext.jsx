@@ -13,7 +13,8 @@ const UserProvider = ({ children }) => {
       auth: true,
     }));
     localStorage.setItem('phone', phone);
-    localStorage.setItem('token',token)
+    localStorage.setItem('token',token);
+    localStorage.setItem('isLoggedIn', 'true');
   };
 
   const logout = () => {
