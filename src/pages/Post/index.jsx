@@ -12,13 +12,6 @@ function Orders() {
     const [search, setSearch] = useState('');
     const [orders, setOrders] = useState(all_orders);
     const [page, setPage] = useState(1);
-    const [pagination, setPagination] = useState([]);
-
-    useEffect(() => {
-        setPagination(calculateRange(all_orders, 5));
-        setOrders(sliceData(all_orders, page, 5));
-    }, []);
-
     // Search
     const __handleSearch = (event) => {
         setSearch(event.target.value);
