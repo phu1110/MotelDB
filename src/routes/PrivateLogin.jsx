@@ -2,11 +2,11 @@ import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
-const PrivateRoute = (props) => {
+const PrivateLogin = (props) => {
     const {user} = useContext(UserContext);
-   if(user.auth === false) 
+   if(user.auth === true) 
    return <>
- <Navigate to="/login" />;
+ <Navigate to="/users" />;
    </>
 
   return (
@@ -16,4 +16,4 @@ const PrivateRoute = (props) => {
   )
 }
 
-export default PrivateRoute
+export default PrivateLogin

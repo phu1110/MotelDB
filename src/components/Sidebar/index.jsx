@@ -35,7 +35,7 @@ const handleLogout  = () => {
         <nav className='sidebar'>
             <div className='sidebar-container'>
                 <div className='sidebar-logo-container'>
-                   <p className=''>Admin</p>
+                   <p className='ml-[80px] mt-[20px] text-white '>Admin</p>
                 </div>
 
                 <div className='sidebar-container'>
@@ -49,9 +49,9 @@ const handleLogout  = () => {
                         ))}
                     </div>
 
-                    <div className='sidebar-footer'>
+                    <div className='sidebar-footer' onClick={() => handleLogout()}>
                         <span className='sidebar-item-label'
-                        onClick={() => handleLogout()}>Logout</span>
+                        >Logout</span>
                         <img 
                             src={LogoutIcon}
                             alt='icon-logout'

@@ -14,7 +14,7 @@ function DashboardHeader ({ btnText, onClick }) {
             }
 
             <div className='dashbord-header-right'>
-                {user && user.phone && <span> Chào mừng {user.phone}</span>}
+                {user && user.firstname && <span> Chào mừng {user.lastname + " " + user.firstname}</span>}
                 <img 
                     src={NotificationIcon}
                     alt='notification-icon'

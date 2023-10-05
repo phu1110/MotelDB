@@ -1,27 +1,34 @@
 import React from 'react'
 
-const UserContext = React.createContext({ phone: '', auth: false });
+const UserContext = React.createContext({ firstname : '', lastname: '',role: '', auth: false });
 
 // @function  UserProvider
 // Create function to provide UserContext
 const UserProvider = ({ children }) => {
-  const [user, setUser] = React.useState({ phone: '', auth: false });
+  const [user, setUser] = React.useState({ firstname : '', lastname: '',role: '', auth: false });
 
-  const loginContext = (phone,token) => {
+  const loginContext = (token,firstname,lastname,role) => {
     setUser((user) => ({
-      phone: phone,
+      firstname:firstname,
+      lastname:lastname,
+      role:role,
       auth: true,
     }));
-    localStorage.setItem('phone', phone);
     localStorage.setItem('token',token);
-    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('firstname',firstname);
+    localStorage.setItem('lastname',lastname);
+    localStorage.setItem('role',role);
   };
 
   const logout = () => {
-    localStorage.removeItem('phone');
     localStorage.removeItem('token');
+    localStorage.removeItem('firstname');
+    localStorage.removeItem('lastname');
+    localStorage.removeItem('role');
     setUser((user) => ({
-      phone: '',
+      firstname:'',
+      lastname:'',
+      role:'',
       auth: false,
     }));
   };

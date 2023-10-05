@@ -7,10 +7,14 @@ import sidebar_menu from '../constants/sidebar-menu';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
+import PrivateLogin from './PrivateLogin';
 const AppRouter = () => {
   return (
     <Router>
-      <Routes><Route exact path="/login" element={< Login />} />
+      <Routes>
+        <Route exact path="/login" element={<PrivateLogin>
+                <Login/>
+               </PrivateLogin>} />
         <Route exact path="/register" element={< Register />} />
       </Routes>
       <div className='dashboard-container'>

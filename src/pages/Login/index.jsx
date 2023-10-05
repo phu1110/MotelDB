@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
 
@@ -15,50 +14,55 @@ const Login = () => {
         return axios.post('https://localhost:7139/api/Login',{phone,password});
     }
     const {loginContext} = useContext(UserContext);
-   useEffect(() => {
-      let token = localStorage.getItem('token');
-      if(token) {
-        navigate("/users")
-      }
-   },[])
+    
     const handleLogin = async () => {
       setLoadingAPI(true);
-  try {
-    // Gọi hàm loginapi và đợi kết quả
-    const response = await loginapi(phone, password);
-    // Lấy token từ response
-    const token = response.data.token;
-
-    // Lưu token vào Local Storage
-    loginContext(phone,token)
-    navigate("/users")
-    // In ra console để kiểm tra
-    toast.success('Đăng nhập thành công', {
-      position: 'top-right',
-      autoClose: 3000, // Đóng thông báo sau 3 giây
-      hideProgressBar: false,
-      
-  });
-  } catch (error) {
-    if (error.response) {
-      toast.error('Nhập sai tài khoản hoặc mật khẩu vui lòng nhập lại', {
-        position: 'top-right',
-        autoClose: 3000, // Đóng thông báo sau 3 giây
-        hideProgressBar: false,
-    });
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } else if (error.request) {
-      // The request was made but no response was received
-      // `error.request` is an instance of XMLHttpRequest in the browser 
-      // and an instance of http.ClientRequest in node.js
-      console.log(error.request);
-    } else {
-      console.log('Error', error.message);
-    }
-    
-  }
+        try {
+          // Gọi hàm loginapi và đợi kết quả
+          const response = await loginapi(phone, password);
+          // Lấy token từ response
+          const token = response.data.token;
+          const firstname = response.data.firstName;
+          const lastname = response.data.lastName;
+          const role = response.data.roleId;
+          if( role === "1")
+          {
+            toast.success('Đăng nhập thành công', {
+              position: 'top-right',
+              autoClose: 3000, // Đóng thông báo sau 3 giây
+              hideProgressBar: false,
+          });
+          navigate('/users')
+          loginContext(token,firstname,lastname,role)
+          }
+          else{
+            toast.error('Bạn không có quyền truy cập vào trang này', {
+              position: 'top-right',
+              autoClose: 3000, // Đóng thông báo sau 3 giây
+              hideProgressBar: false,
+          });
+          }
+          
+        } catch (error) {
+          if (error.response) {
+            toast.error('Nhập sai tài khoản hoặc mật khẩu vui lòng nhập lại', {
+              position: 'top-right',
+              autoClose: 3000, // Đóng thông báo sau 3 giây
+              hideProgressBar: false,
+          });
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser 
+            // and an instance of http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          
+        }
   setLoadingAPI(false);
     };
     return (
@@ -66,7 +70,6 @@ const Login = () => {
   <div className="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
     <div className="flex-col flex  self-center p-10 sm:max-w-5xl xl:max-w-2xl  z-10">
       <div className="self-start hidden lg:flex flex-col  text-white">
-        <img src className="mb-3" />
         <h1 className="mb-3 font-bold text-5xl">Chào mừng trở lại </h1>
         
       </div>
@@ -80,7 +83,7 @@ const Login = () => {
         <div className="space-y-5">
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700 tracking-wide">Số Điện Thoại</label>
-            <input className=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400" type placeholder="079......" 
+            <input className=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400"  placeholder="079......" 
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
             />
@@ -102,15 +105,15 @@ const Login = () => {
               </label>
             </div>
             <div className="text-sm">
-              <a href="#" className="text-green-400 hover:text-green-500">
+              <Link to='/register' className="text-green-400 hover:text-green-500">
                 Forgot your password?
-              </a>
+              </Link>
             </div>
           </div>
           <div>
-            <button type="submit" className="w-full flex gap-2 justify-center items-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
+            <button className="w-full flex gap-2 justify-center items-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
             onClick={() => handleLogin()}>
-              {loadingapi &&  <i class="fas fa-circle-notch fa-spin"></i> }
+              {loadingapi &&  <i className="fas fa-circle-notch fa-spin"></i> }
                Đăng nhập
             </button>
           </div>
