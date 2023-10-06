@@ -8,26 +8,33 @@ const sidebar_menu = [
         id: 1,
         icon: DashboardIcon,
         path: '/',
-        title: 'Dashboard',
+        title: 'Thống Kê',
     },
     {
         id: 2,
         icon: ProductIcon,
-        path: '/orders',
-        title: 'Orders',
+        path: '/users',
+        title: 'Nguời dùng',
     },
     {
         id: 3,
         icon: ShippingIcon,
         path: '/products',
-        title: 'Products',
+        title: 'Danh mục',
     },
     {
         id: 4,
         icon: UserIcon,
         path: '/profile',
-        title: 'My account',
-    }
+        title: 'Bài Đăng',
+    },
+    {
+        id: 5,
+        icon: UserIcon,
+        path: '/profile',
+        title: 'Gói',
+    },
+    
 ]
 
 export default sidebar_menu;
