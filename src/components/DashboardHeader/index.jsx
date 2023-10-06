@@ -23,7 +23,7 @@ function DashboardHeader ({ btnText, onClick }) {
                     src={SettingsIcon}
                     alt='settings-icon'
                     className='dashbord-header-icon' />
-                <img
+                <img alt='ấda'
                     className='dashbord-header-avatar'
                     src='https://reqres.in/img/faces/9-image.jpg' />
             </div>

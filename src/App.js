@@ -12,6 +12,7 @@ function App () {
     {
       loginContext(localStorage.getItem("token"),localStorage.getItem("firstname"),localStorage.getItem("lastname"),localStorage.getItem("role"));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 console.log(user)
   return(
