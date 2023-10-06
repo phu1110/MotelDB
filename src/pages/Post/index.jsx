@@ -110,12 +110,13 @@ function Orders() {
                                     <td><span>{item.id}</span></td>
                                     <td><span>{item.title}</span></td>
                                     <td>
-                                        <span>{item.actualFile}</span>
+                                        <span>{item.actualFile}</span>  
                                     </td>
                                     <td><span>{item.description}</span></td>
+
                                     <td><span>{item.address}</span></td>
                                     <td><span>{item.area}</span></td>
-                                    <td><span>{item.categorylist}</span></td>
+                                    <td><span>{item.categorylist.join(', ')}</span></td>
                                     <td><span>{item.formattedDatecreated}</span></td>
                                     <td>
                                             <span>{item.formattedDateapprove === null ?

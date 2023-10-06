@@ -10,17 +10,13 @@ import updateData from '../api/postput';
 import Autocomplete from '@mui/material/Autocomplete';
 
 function EditDialog({ open, handleClose, rowData }) {
-  const [post, setPost] = React.useState(null);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [inputValue, setInputValue] = useState('');
   const [editedData, setEditedData] = useState(rowData);
 
-  // const categoryOptions = [
-  //   { id: 1, label: 'Căn Hộ Mini' },
-  //   { id: 2, label: 'Phòng Trọ' },
-  //   { id: 3, label: 'Nhà Nguyên Căn' },
-  //   // Add more categories as needed
-  // ];
+  const handleCategoryChange = (event, newValue) => {
+    setEditedData({ ...editedData, categoryids: newValue.map((option) => option.id) });
+  };
+
+
   const [categoryOptions, setData] = useState([]);
   useEffect(() => {
     fetchCategoryFromApi()
@@ -31,13 +27,10 @@ function EditDialog({ open, handleClose, rowData }) {
         console.error('Error fetching data:', error);
       });
   }, []);
-  const handleCategoryChange = (event, newValue) => {
-    setSelectedCategories(newValue); // Update selected categories when the user makes a selection
-  };
   const handleSave = async () => {
     try {
       if (editedData) {
-        const updateddata = { title: editedData.title, address: editedData.address, description: editedData.description, price: editedData.price, area: editedData.area, isHire: editedData.isHire, status: editedData.status };
+        const updateddata = { title: editedData.title, address: editedData.address, description: editedData.description, price: editedData.price, area: editedData.area, isHire: editedData.isHire, status: editedData.status, categoryids: editedData.categoryids};
         await updateData(editedData.id, updateddata);
         console.log('Thành Công', updateData);
         handleClose();
@@ -99,14 +92,8 @@ function EditDialog({ open, handleClose, rowData }) {
           id="size-small-outlined-multi"
           options={categoryOptions}
           getOptionLabel={(option) => option.name}
-          value={editedData.categorylist.map((name) => ({
-            name: name,
-          }))}
-          onChange={(event, newValue) => {
-            // newValue is an array of objects, each with a "name" property
-            const newCategoryList = newValue.map((item) => item.name);
-            setEditedData({ ...editedData, categorylist: newCategoryList });
-          }}
+          value={categoryOptions.filter((option) => editedData.categoryids.includes(option.id))}
+          onChange={handleCategoryChange}
           renderInput={(categoryOptions) => (
             <TextField
               {...categoryOptions}

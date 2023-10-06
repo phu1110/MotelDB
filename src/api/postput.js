@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const updateData = async (id, {title, description, address, price, area, status, isHire}) => {
+const updateData = async (id, {title, description, address, price, area, status, isHire, categoryids}) => {
   try {
     const response = await axios.put(`https://localhost:7139/api/Post/update-basic/?id=${id}`, {
       title: title,
@@ -10,8 +10,7 @@ const updateData = async (id, {title, description, address, price, area, status,
       area : area,
       status : status,
       isHire : isHire,
-      adminId:11,
-      categoryids : [1],
+      categoryids : categoryids,
     });
     console.log('Data updated:', response.data);
     // Handle success (e.g., show a success message)
