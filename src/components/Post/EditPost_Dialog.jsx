@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import fetchCategoryFromApi from '../api/categoryget'
+import fetchCategoryFromApi from '../../api/categoryget'
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import updateData from '../api/postput';
+import updateData from '../../api/postput';
 import Autocomplete from '@mui/material/Autocomplete';
 
 function EditDialog({ open, handleClose, rowData }) {
@@ -15,6 +15,18 @@ function EditDialog({ open, handleClose, rowData }) {
   const handleCategoryChange = (event, newValue) => {
     setEditedData({ ...editedData, categoryids: newValue.map((option) => option.id) });
   };
+  const handleisHireChange = (event, newValue) => {
+    setEditedData({ ...editedData, isHire: newValue });
+  };
+  const handlestatusChange = (event, newValue) => {
+    setEditedData({ ...editedData, status: newValue });
+  };
+  const hirestatusOption = [
+    'Chưa Được Thuê', 'Đã Được Thuê'
+  ];
+  const statusOption = [
+    'Đã Duyệt', 'Không chấp nhận duyệt', 'Đang chờ duyệt'
+  ];
 
 
   const [categoryOptions, setData] = useState([]);
@@ -30,7 +42,7 @@ function EditDialog({ open, handleClose, rowData }) {
   const handleSave = async () => {
     try {
       if (editedData) {
-        const updateddata = { title: editedData.title, address: editedData.address, description: editedData.description, price: editedData.price, area: editedData.area, isHire: editedData.isHire, status: editedData.status, categoryids: editedData.categoryids};
+        const updateddata = { title: editedData.title, address: editedData.address, description: editedData.description, price: editedData.price, area: editedData.area, isHire: editedData.isHire, status: editedData.status, categoryids: editedData.categoryids };
         await updateData(editedData.id, updateddata);
         console.log('Thành Công', updateData);
         handleClose();
@@ -75,17 +87,31 @@ function EditDialog({ open, handleClose, rowData }) {
           value={editedData.price}
           onChange={(e) => setEditedData({ ...editedData, price: e.target.value })}
         />
-        <TextField
-          label="Status"
-          fullWidth
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={statusOption}
+          getOptionLabel={(option) => option}
           value={editedData.status}
-          onChange={(e) => setEditedData({ ...editedData, status: e.target.value })}
+          disableClearable={true}
+          onChange={handlestatusChange}
+          renderInput={(statusOption) => <TextField {...statusOption} label="Status" inputProps={{
+            ...statusOption.inputProps,
+            readOnly: true,
+          }} />}
         />
-        <TextField
-          label="Hire Status"
-          fullWidth
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={hirestatusOption}
+          getOptionLabel={(option) => option}
           value={editedData.isHire}
-          onChange={(e) => setEditedData({ ...editedData, isHire: e.target.value })}
+          disableClearable={true}
+          onChange={handleisHireChange}
+          renderInput={(hirestatusOption) => <TextField {...hirestatusOption} label="Hire Status" inputProps={{
+            ...hirestatusOption.inputProps,
+            readOnly: true,
+          }} />}
         />
         <Autocomplete
           multiple
@@ -94,12 +120,13 @@ function EditDialog({ open, handleClose, rowData }) {
           getOptionLabel={(option) => option.name}
           value={categoryOptions.filter((option) => editedData.categoryids.includes(option.id))}
           onChange={handleCategoryChange}
+          disableClearable={true}
           renderInput={(categoryOptions) => (
             <TextField
               {...categoryOptions}
               label="Select Categories"
               placeholder="Select Categories"
-            />
+              inputProps={{ ...categoryOptions.inputProps, readOnly: true }} />
           )}
         />
       </DialogContent>

@@ -1,92 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import DashboardHeader from '../../components/DashboardHeader';
 import fetchDataFromApi from '../../api/postget';
-import all_orders from '../../constants/orders';
-import { calculateRange, sliceData } from '../../utils/table-pagination';
-import EditDialog from '../../components/Dialog'
+import PostTable from '../../components/Post/PostTable';
 
 import '../styles.css';
-import { Navigate } from 'react-router';
 
-function Orders() {
-    const [search, setSearch] = useState('');
-    const [orders, setOrders] = useState(all_orders);
+function Post() {
     const [page, setPage] = useState(1);
-    // Search
-    const __handleSearch = (event) => {
-        setSearch(event.target.value);
-        if (event.target.value !== '') {
-            let search_results = orders.filter((item) =>
-                item.first_name.toLowerCase().includes(search.toLowerCase()) ||
-                item.last_name.toLowerCase().includes(search.toLowerCase()) ||
-                item.product.toLowerCase().includes(search.toLowerCase())
-            );
-            setOrders(search_results);
-        }
-        else {
-            __handleChangePage(1);
-        }
-    };
-    // Change Page 
-    const __handleChangePage = (new_page) => {
-        setPage(new_page);
-        setOrders(sliceData(all_orders, new_page, 5));
-    }
+    const [pageSize, setPageSize] = useState(10);
     const [data, setData] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+  
+    const handlePageChange = (event, newPage) => {
+        setPage(newPage + 1);
+      };
+    
+      const handlePageSizeChange = (event) => {
+        setPageSize(parseInt(event.target.value, 10));
+        setPage(1); // Reset to the first page when changing page size
+      };
     useEffect(() => {
-        fetchDataFromApi()
+        fetchDataFromApi(page, pageSize)
             .then(apiData => {
-                setData(apiData);
+                setData(apiData.post);
+                setTotalCount(apiData.total);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
-    }, []);
-    const buttons = [
-        {
-          text: 'New Post',
-          onClick: () => {
-          },
-        },
-        {
-          text: 'Edit Post',
-          onClick: () => {
-          },
-        },
-        {
-            text: 'Delete Post',
-            onClick: () => {
-            },
-        },
-      ];
-      const [openDialog, setOpenDialog] = useState(false);
-      const [selectedRowData, setSelectedRowData] = useState(null);
-    
-      const handleButton1Click = (rowData) => {
-        setSelectedRowData(rowData);
-        setOpenDialog(true);
-      };
-    
-      const handleCloseDialog = () => {
-        setOpenDialog(false);
-      };
+    }, [page, pageSize]);
     return (
         <div className='dashboard-content'>
-            <DashboardHeader
-                buttons={buttons} />
             <div className='dashboard-content-container'>
-                <div className='dashboard-content-header'>
-                    <h2>Post List</h2>
-                    <div className='dashboard-content-search'>
-                        <input
-                            type='text'
-                            value={search}
-                            placeholder='Search..'
-                            className='dashboard-content-input'
-                            onChange={e => __handleSearch(e)} />
-                    </div>
-                </div>
-                <table>
+                {/* <table>
                     <thead>
                         <th>ID</th>
                         <th>TITLE</th>
@@ -140,10 +85,18 @@ function Orders() {
                         handleClose={handleCloseDialog}
                         rowData={selectedRowData}
                     />
-                )}
+                )} */}
+                <PostTable 
+                    data={data}
+                    page={page}
+                    pageSize={pageSize}
+                    onPageChange={handlePageChange}
+                    onPageSizeChange={handlePageSizeChange} 
+                    totalCount={totalCount}
+                />
             </div>
         </div>
     )
 }
 
-export default Orders;
+export default Post;
