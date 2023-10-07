@@ -25,6 +25,7 @@ const Login = () => {
           const firstname = response.data.firstName;
           const lastname = response.data.lastName;
           const role = response.data.roleId;
+          const avatar = response.data.avatar;
           if( role === "1")
           {
             toast.success('Đăng nhập thành công', {
@@ -33,7 +34,7 @@ const Login = () => {
               hideProgressBar: false,
           });
           navigate('/users')
-          loginContext(token,firstname,lastname,role)
+          loginContext(token,firstname,lastname,role,avatar)
           }
           else{
             toast.error('Bạn không có quyền truy cập vào trang này', {
