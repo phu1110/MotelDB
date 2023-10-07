@@ -6,7 +6,7 @@ import { getUsers, getTiers, getRoles, updateUser, deleteUser } from '../../api/
 import axios from 'axios';
 import ConfirmationModal from '../../components/Users/ConfirmationModal'
 import UserList from '../../components/Users/UserList'
-import UserForm from '../../components/Users//UserList'
+import UserForm from '../../components/Users/UserForm'
 import Pagination from '../../components/Users/Pagination'
 function Users() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -19,68 +19,66 @@ function Users() {
     const [roles, setRoles] = useState([]);
     const [tiers, setTiers] = useState([]);
     const handleEdit = (user) => {
-        setEditingUser(user);// Lưu thông tin người dùng đang được chỉnh sửa
-        setIsEditing(true); // Hiển thị form sửa thông tin
-        
+        setEditingUser(user);
+        setIsEditing(true);
     };
+
     const handleCancel = () => {
-        setEditingUser(null); // Đặt editingUser về null để xóa dữ liệu chỉnh sửa
-        setIsEditing(false); // Tắt chế độ chỉnh sửa
+        setEditingUser(null);
+        setIsEditing(false);
     };
-    const handleSave =async(event) => {
+    const handleSave = async (event) => {
         event.preventDefault();
-        // Gửi yêu cầu cập nhật thông tin người dùng đến API
         try {
             await updateUser({
-              ...editingUser,
-              gender: editingUser.gender === 'true',
+                ...editingUser,
+                gender: editingUser.gender === 'true',
             });
             setIsEditing(false);
-                toast.success('Thông tin đã được cập nhật', {
-                    position: 'top-right',
-                    autoClose: 3000, // Đóng thông báo sau 3 giây
-                    hideProgressBar: false,
+            toast.success('Thông tin đã được cập nhật', {
+                position: 'top-right',
+                autoClose: 3000, // Đóng thông báo sau 3 giây
+                hideProgressBar: false,
 
-                });
-                const updatedUsers = users.map((user) =>
-                    user.id === editingUser.id ? editingUser : user
-                );
-                setUsers(updatedUsers);
-            }catch (error) {
-                toast.error('Lỗi không sửa được người dùng', {
-                    position: 'top-right',
-                    autoClose: 3000, // Đóng thông báo sau 3 giây
-                    hideProgressBar: false,
-
-                });
-            }
-          };
+            });
+            const updatedUsers = users.map((user) =>
+                user.id === editingUser.id ? editingUser : user
+            );
+            setUsers(updatedUsers);
+        } catch (error) {
+            toast.error('Lỗi không sửa được người dùng', {
+                position: 'top-right',
+                autoClose: 3000, // Đóng thông báo sau 3 giây
+                hideProgressBar: false,
+            });
+        }
+    };
     const fetchData = async () => {
         try {
-          const userResponse = await getUsers(currentPage);
-          setUsers(userResponse.data.users);
-          setTotalPages(userResponse.data.totalPages);
-    
-          const tierResponse = await getTiers();
-          setTiers(tierResponse.data);
-    
-          const roleResponse = await getRoles();
-          setRoles(roleResponse.data);
+            const userResponse = await getUsers(currentPage);
+            setUsers(userResponse.data.users);
+            setTotalPages(userResponse.data.totalPages);
+
+            const tierResponse = await getTiers();
+            setTiers(tierResponse.data);
+
+            const roleResponse = await getRoles();
+            setRoles(roleResponse.data);
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         fetchData();
-      }, [currentPage]);
+    }, [currentPage]);
     const handleDelete = (userId) => {
         // Hiển thị toast để xác nhận trước khi xóa
         toast.info(
             <ConfirmationModal
-            handleDeleteConfirmed={() => handleDeleteConfirmed(userId)}
-            hideToast={hideToast}
-          />,
+                handleDeleteConfirmed={() => handleDeleteConfirmed(userId)}
+                hideToast={hideToast}
+            />,
             {
                 position: 'top-right',
                 autoClose: false,
@@ -93,26 +91,26 @@ function Users() {
         );
     };
 
-    const handleDeleteConfirmed = async(userId) => {
+    const handleDeleteConfirmed = async (userId) => {
         // Gửi yêu cầu xóa đến API
         try {
             await deleteUser(userId);
             const updatedUsers = users.filter((user) => user.id !== userId);
             setUsers(updatedUsers);
 
-                toast.success('Xóa dữ liệu thành công', {
-                    position: 'top-right',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                });
-            }catch (error) {
-                toast.error('Xóa dữ liệu không thành công', {
-                    position: 'top-right',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                });
-            }
-          };
+            toast.success('Xóa dữ liệu thành công', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+            });
+        } catch (error) {
+            toast.error('Xóa dữ liệu không thành công', {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+            });
+        }
+    };
     const hideToast = () => {
         // Ẩn toast nếu người dùng hủy bỏ
         toast.dismiss();
@@ -135,7 +133,7 @@ function Users() {
                     const userData = response.data.users;
                     setUsers(userData);
                     setTotalPages(response.data.totalPages);
-                    
+
                 })
                 .catch((error) => {
                     console.error(error);
@@ -162,16 +160,16 @@ function Users() {
                     </div>
                 </div>
                 <UserList users={users} handleEdit={handleEdit} handleDelete={handleDelete} />
-      <UserForm
-        editingUser={editingUser}
-        isEditing={isEditing}
-        setEditingUser={setEditingUser}
-        handleSave={handleSave}
-        handleCancel={handleCancel}
-        roles={roles}
-        tiers={tiers}
-      />
-      <Pagination totalPages={totalPages} handlePageClick={handlePageClick} />
+                <UserForm
+                    editingUser={editingUser}
+                    isEditing={isEditing}
+                    setEditingUser={setEditingUser}
+                    handleSave={handleSave}
+                    handleCancel={handleCancel}
+                    roles={roles}
+                    tiers={tiers}
+                />
+                <Pagination totalPages={totalPages} handlePageClick={handlePageClick} />
             </div>
         </div>
     )

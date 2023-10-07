@@ -20,8 +20,6 @@ function UserList({ users, handleEdit, handleDelete }) {
         <th>Xóa</th>
         <th>Sửa</th>
     </thead>
-
-    {users.length !== 0 ?
         <tbody>
             {users.map((user, index) => (
                 <tr key={index}>
@@ -58,7 +56,6 @@ function UserList({ users, handleEdit, handleDelete }) {
                 </tr>
             ))}
         </tbody>
-        : null}
 </table>
   );
 }
