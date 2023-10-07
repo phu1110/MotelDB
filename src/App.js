@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import Post from './pages/Post';
 import './index.css'
 import { useContext } from 'react';
 import { UserContext } from './context/UserContext';
@@ -15,6 +16,21 @@ function App () {
   },[])
 console.log(user)
   return(
+    <Router>
+      <div className='dashboard-container'>
+        <SideBar menu={sidebar_menu} />
+          
+          <div className='dashboard-body'>
+              <Routes>
+                  <Route path="*" element={<div></div>} />
+                  <Route exact path="/" element={<div></div>} />
+                  <Route exact path="/posts" element={<Post/>} />
+                  <Route exact path="/locations" element={<div></div>} />
+                  <Route exact path="/profile" element={<div></div>} />
+              </Routes>
+          </div>
+      </div>
+    </Router>
     <AppRouter/>
   )
 }

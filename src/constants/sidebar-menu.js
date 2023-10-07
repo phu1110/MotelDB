@@ -18,9 +18,9 @@ const sidebar_menu = [
     },
     {
         id: 3,
-        icon: ShippingIcon,
-        path: '/products',
-        title: 'Danh mục',
+        icon: ProductIcon,
+        path: '/posts',
+        title: 'Posts',
     },
     {
         id: 4,
