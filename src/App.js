@@ -1,13 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
-
-import SideBar from './components/Sidebar';
-import sidebar_menu from './constants/sidebar-menu';
-
+import React, { useEffect } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import Post from './pages/Post';
-
+import './index.css'
+import { useContext } from 'react';
+import { UserContext } from './context/UserContext';
+import AppRouter from './routes/AppRouter';
 function App () {
+  const {user, loginContext} = useContext(UserContext);
+  useEffect (() => {
+    if(localStorage.getItem("token"))
+    {
+      loginContext(localStorage.getItem("token"),localStorage.getItem("firstname"),localStorage.getItem("lastname"),localStorage.getItem("role"));
+    }
+  },[])
+console.log(user)
   return(
     <Router>
       <div className='dashboard-container'>
@@ -24,6 +31,7 @@ function App () {
           </div>
       </div>
     </Router>
+    <AppRouter/>
   )
 }
 
