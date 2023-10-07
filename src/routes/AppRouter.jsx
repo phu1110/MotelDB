@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import PrivateLogin from './PrivateLogin';
+import Post from '../pages/Post';
 const AppRouter = () => {
   return (
     <Router>
@@ -31,6 +32,10 @@ const AppRouter = () => {
             <Route  path="/users" element={
                <PrivateRoute>
                 <Users/>
+               </PrivateRoute>} />
+               <Route  path="/post" element={
+               <PrivateRoute>
+                <Post/>
                </PrivateRoute>} />
             <Route exact path="/locations" element={<div></div>} />
             <Route exact path="/profile" element={<div></div>} />
