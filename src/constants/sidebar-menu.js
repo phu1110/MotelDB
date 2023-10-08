@@ -20,19 +20,19 @@ const sidebar_menu = [
         id: 3,
         icon: ProductIcon,
         path: '/post',
-        title: 'Post',
+        title: 'Tin',
     },
     {
         id: 4,
         icon: UserIcon,
-        path: '/profile',
-        title: 'Bài Đăng',
+        path: '/tier',
+        title: 'Gói',
     },
     {
         id: 5,
         icon: UserIcon,
         path: '/profile',
-        title: 'Gói',
+        title: 'Vai trò',
     },
     
 ]
