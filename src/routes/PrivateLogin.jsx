@@ -6,12 +6,10 @@ import { UserContext } from '../context/UserContext';
 const PrivateLogin = (props) => {
   const { user } = useContext(UserContext);
 
-  if (user.auth === true) {
-    const storedPath = localStorage.getItem('path');
-    // Kiểm tra xem đường dẫn đã lưu trong localStorage có tồn tại hay không
-    const pathToNavigate = storedPath ? storedPath : '/users'; // Thay thế '/defaultFallbackPath' bằng đường dẫn mặc định của bạn
+  if (user && user.auth === true) {
+    
 
-    return <Navigate to={pathToNavigate} />;
+    return <Navigate to={user.path} />;
   }
 
   return <>{props.children}</>;
