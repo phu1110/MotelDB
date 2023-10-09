@@ -26,11 +26,11 @@ const AppRouter = () => {
           element={<PrivateRoute><div></div></PrivateRoute>}
         />
         <Route
-          path="/users/*"
+          path="/users"
           element={<PrivateRoute><Users /></PrivateRoute>}
         />
         <Route
-          path="/post/*"
+          path="/post"
           element={<PrivateRoute><Post /></PrivateRoute>}
         />
         <Route
@@ -38,7 +38,7 @@ const AppRouter = () => {
           element={<DetailsUser />}
         />
         <Route
-          path="/tier/*"
+          path="/tier"
           element={<PrivateRoute><Tiers /></PrivateRoute>}
         />
         <Route
@@ -46,7 +46,7 @@ const AppRouter = () => {
           element={<PrivateRoute><DetailTier /></PrivateRoute>}
         />
         <Route
-          path="/profile/*"
+          path="/profile"
           element={<PrivateRoute><div></div></PrivateRoute>}
         />
         <Route
