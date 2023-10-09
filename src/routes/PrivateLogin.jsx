@@ -1,19 +1,20 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
+
 const PrivateLogin = (props) => {
-    const {user} = useContext(UserContext);
-   if(user.auth === true) 
-   return <>
- <Navigate to="/users" />;
-   </>
+  const { user } = useContext(UserContext);
 
-  return (
-    <>
-     {props.children}
-    </>
-  )
-}
+  if (user.auth === true) {
+    const storedPath = localStorage.getItem('path');
+    // Kiểm tra xem đường dẫn đã lưu trong localStorage có tồn tại hay không
+    const pathToNavigate = storedPath ? storedPath : '/users'; // Thay thế '/defaultFallbackPath' bằng đường dẫn mặc định của bạn
 
-export default PrivateLogin
+    return <Navigate to={pathToNavigate} />;
+  }
+
+  return <>{props.children}</>;
+};
+
+export default PrivateLogin;

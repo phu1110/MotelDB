@@ -14,17 +14,32 @@ function SideBar ({ menu }) {
     const location = useLocation();
     const navigate = useNavigate();
     const [active, setActive] = useState(1);
-    const {logout} = useContext(UserContext);
+    const {logout,loginContext} = useContext(UserContext);
     useEffect(() => {
         menu.forEach(element => {
             if (location.pathname === element.path) {
                 setActive(element.id);
-            }
+                const path =localStorage.setItem('path',element.path);
+                const token = localStorage.getItem('token');
+                const firstname = localStorage.getItem('firstname');
+                const lastname = localStorage.getItem('lastname');
+                const role = localStorage.getItem('role');
+                const avatar = localStorage.getItem('avatar');
+                loginContext(token,firstname,lastname,role,avatar,path)
+            }   
         });
+        
     }, [location.pathname])
 
     const __navigate = (id) => {
         setActive(id);
+        const path = localStorage.removeItem('path');
+        const token = localStorage.getItem('token');
+                const firstname = localStorage.getItem('firstname');
+                const lastname = localStorage.getItem('lastname');
+                const role = localStorage.getItem('role');
+                const avatar = localStorage.getItem('avatar');
+        loginContext(token,firstname,lastname,role,avatar,path)
     }
 const handleLogout  = () => {
     logout();
