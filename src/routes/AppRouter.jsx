@@ -17,10 +17,7 @@ const AppRouter = () => {
   <ToastContainer />
 
       <Routes>
-        <Route
-          path="*"
-          element={<PrivateRoute><div></div></PrivateRoute>}
-        />
+  
         <Route
           path="/"
           element={<PrivateRoute><div></div></PrivateRoute>}
