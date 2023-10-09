@@ -8,8 +8,8 @@ const PrivateLogin = (props) => {
 
   if (user && user.auth === true) {
     
-
-    return <Navigate to={user.path} />;
+    const inforpath = user.path;
+    return <Navigate to={inforpath}/>;
   }
 
   return <>{props.children}</>;
