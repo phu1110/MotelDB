@@ -34,6 +34,12 @@ const sidebar_menu = [
         path: '/profile',
         title: 'Gói',
     },
+    {
+        id: 6,
+        icon: UserIcon,
+        path: '/role',
+        title: 'Role',
+    },
     
 ]
 

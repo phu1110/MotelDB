@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import fetchCategoryFromApi from '../../api/categoryget'
+import {getCategoryData} from '../../api/api';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import updateData from '../../api/postput';
+import {putPost} from '../../api/api';
 import Autocomplete from '@mui/material/Autocomplete';
 
 function EditDialog({ open, handleClose, rowData }) {
   const [editedData, setEditedData] = useState(rowData);
-
+  const [categoryOptions, setCategoryOptions] = useState([]);
   const handleCategoryChange = (event, newValue) => {
     setEditedData({ ...editedData, categoryids: newValue.map((option) => option.id) });
   };
@@ -25,64 +25,61 @@ function EditDialog({ open, handleClose, rowData }) {
     'Chưa Được Thuê', 'Đã Được Thuê'
   ];
   const statusOption = [
-    'Đã Duyệt', 'Không chấp nhận duyệt', 'Đang chờ duyệt'
+    'Đã Duyệt', 'Không Chấp Nhận Duyệt', 'Đang Chờ Duyệt', 'Đã Ẩn'
   ];
 
 
-  const [categoryOptions, setData] = useState([]);
   useEffect(() => {
-    fetchCategoryFromApi()
+    getCategoryData()
       .then(apiData => {
-        setData(apiData);
+        setCategoryOptions(apiData.data);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
   }, []);
   const handleSave = async () => {
     try {
       if (editedData) {
         const updateddata = { title: editedData.title, address: editedData.address, description: editedData.description, price: editedData.price, area: editedData.area, isHire: editedData.isHire, status: editedData.status, categoryids: editedData.categoryids };
-        await updateData(editedData.id, updateddata);
-        console.log('Thành Công', updateData);
+        await putPost(editedData.id, updateddata);
+        console.log('Thành Công', putPost);
         handleClose();
       }
     } catch (error) {
       console.error('Error updating data:', error);
-      // Handle error (e.g., show an error message)
     }
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Edit Post</DialogTitle>
+      <DialogTitle>Sửa Tin</DialogTitle>
       <DialogContent>
         <TextField
-          label="Title"
+          label="Tiêu Đề"
           fullWidth
           value={editedData.title}
           onChange={(e) => setEditedData({ ...editedData, title: e.target.value })}
         />
         <TextField
-          label="Description"
+          label="Mô Tả"
           fullWidth
+          multiline
+          rows={4}
           value={editedData.description}
           onChange={(e) => setEditedData({ ...editedData, description: e.target.value })}
         />
         <TextField
-          label="Address"
+          label="Địa Chỉ"
           fullWidth
           value={editedData.address}
           onChange={(e) => setEditedData({ ...editedData, address: e.target.value })}
         />
         <TextField
-          label="Area"
+          label="Diện Tích"
           fullWidth
           value={editedData.area}
           onChange={(e) => setEditedData({ ...editedData, area: e.target.value })}
         />
         <TextField
-          label="Price"
+          label="Giá"
           fullWidth
           value={editedData.price}
           onChange={(e) => setEditedData({ ...editedData, price: e.target.value })}
@@ -95,7 +92,7 @@ function EditDialog({ open, handleClose, rowData }) {
           value={editedData.status}
           disableClearable={true}
           onChange={handlestatusChange}
-          renderInput={(statusOption) => <TextField {...statusOption} label="Status" inputProps={{
+          renderInput={(statusOption) => <TextField {...statusOption} label="Trạng Thái Duyệt" inputProps={{
             ...statusOption.inputProps,
             readOnly: true,
           }} />}
@@ -108,7 +105,7 @@ function EditDialog({ open, handleClose, rowData }) {
           value={editedData.isHire}
           disableClearable={true}
           onChange={handleisHireChange}
-          renderInput={(hirestatusOption) => <TextField {...hirestatusOption} label="Hire Status" inputProps={{
+          renderInput={(hirestatusOption) => <TextField {...hirestatusOption} label="Trạng Thái Thuê" inputProps={{
             ...hirestatusOption.inputProps,
             readOnly: true,
           }} />}
@@ -124,18 +121,18 @@ function EditDialog({ open, handleClose, rowData }) {
           renderInput={(categoryOptions) => (
             <TextField
               {...categoryOptions}
-              label="Select Categories"
-              placeholder="Select Categories"
+              label="Chọn Danh Mục"
+              placeholder="Chọn Danh Mục"
               inputProps={{ ...categoryOptions.inputProps, readOnly: true }} />
           )}
         />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
-          Cancel
+          Huỷ
         </Button>
         <Button onClick={handleSave} color="primary">
-          Save
+          Lưu
         </Button>
       </DialogActions>
     </Dialog>

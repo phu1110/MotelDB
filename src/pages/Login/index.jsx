@@ -22,6 +22,7 @@ const Login = () => {
           const response = await loginapi(phone, password);
           // Lấy token từ response
           const token = response.data.token;
+          const id = response.data.userId;
           const firstname = response.data.firstName;
           const lastname = response.data.lastName;
           const role = response.data.roleId;
@@ -34,7 +35,7 @@ const Login = () => {
               hideProgressBar: false,
           });
           navigate('/users')
-          loginContext(token,firstname,lastname,role,avatar)
+          loginContext(token,id,firstname,lastname,role,avatar)
           }
           else{
             toast.error('Bạn không có quyền truy cập vào trang này', {
