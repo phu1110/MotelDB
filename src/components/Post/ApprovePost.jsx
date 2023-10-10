@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { putApprovePost } from '../../api/api';
-import axios from 'axios';
+
 function ApprovePost({ open, handleClose, rowData }) {
     const { user } = useContext(UserContext);
     const [editedData, setEditedData] = useState(rowData);
@@ -23,7 +23,19 @@ function ApprovePost({ open, handleClose, rowData }) {
         setTextFieldValue(event.target.value);
     };
     const handleSave = async () => {
-        
+        const data = {
+            userAdminId : user.id,
+            status : editedData.status,
+            reason: reasonField,
+            dateApproved : null,
+        }
+        putApprovePost(editedData.id, data)
+          .then(response => {
+            console.log('PUT request successful', response);
+          })
+          .catch(error => {
+            console.error('Error making PUT request', error);
+          });
     };
     return (
         <Dialog open={open} onClose={handleClose}>

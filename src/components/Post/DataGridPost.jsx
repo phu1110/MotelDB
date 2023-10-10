@@ -34,6 +34,7 @@ export default function DataGridPost() {
             });
     }, [page, pageSize]);
 
+
     const handleEditDialog = (rowData) => {
         setSelectedRowData(rowData);
         setOpenDialog(true);
@@ -165,13 +166,8 @@ export default function DataGridPost() {
                 columns={columns}
                 pageSize={pageSize}
                 page={page - 1}
-                onPageChange={(newPage) => {
-                    setPage(newPage + 1);
-                }}
-                onPageSizeChange={(newPageSize) => {
-                    setPageSize(newPageSize);
-                    setPage(1);
-                }}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
                 pagination
                 pageSizeOptions={[1, 10, 25, 100]}
             />

@@ -47,11 +47,12 @@ export const putUserRole = (userids, roleid) => {
     roleid : roleid
   })
 }
-export const putApprovePost = (id, {adminId,status}) => {
-  return axios.put(`${API_BASE_URL}/Post/approve-post?id=${id}`, {
-    adminId: adminId,
+export const putApprovePost = (id, {userAdminId,status,reason,dateApproved}) => {
+  return axios.put(`${API_BASE_URL}/Post/post-approve?id=${id}`, {
+    userAdminId: userAdminId,
     status : status,
-    //reason: reason,
+    reason: reason,
+    dateApproved : dateApproved
   })
 }
 export const deletePost = (id) => {

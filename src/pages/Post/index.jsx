@@ -3,7 +3,6 @@ import PostTable from '../../components/Post/PostTable';
 import DataGridPost from '../../components/Post/DataGridPost';
 import DashboardHeader from '../../components/DashboardHeader';
 import '../styles.css';
-
 function Post() {
     return (
         <div className='dashboard-content'>
