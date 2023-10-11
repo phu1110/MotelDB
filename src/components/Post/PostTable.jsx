@@ -8,11 +8,35 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import EditDialog from '../../components/Post/EditPost_Dialog'
 import Button from '@mui/material/Button';
 import TablePagination from '@mui/material/TablePagination';
-import axios from 'axios';
+import {deletePost, getPostData} from '../../api/api';
 
-const PostTable = ({ data, page, pageSize, onPageChange, onPageSizeChange, totalCount }) => {
+const PostTable = () => {
     const [sortBy, setSortBy] = useState(null);
     const [sortOrder, setSortOrder] = useState('asc');
+
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [data, setData] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+
+    const handlePageChange = (event, newPage) => {
+        setPage(newPage + 1);
+    };
+    
+      const handlePageSizeChange = (event) => {
+        setPageSize(parseInt(event.target.value, 10));
+        setPage(1);
+    };
+    useEffect(() => {
+        getPostData(page, pageSize)
+            .then(apiData => {
+                setData(apiData.data.post);
+                setTotalCount(apiData.data.total);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    },[page, pageSize]);
 
     const handleSort = (property) => {
         const isAsc = sortBy === property && sortOrder === 'asc';
@@ -35,13 +59,7 @@ const PostTable = ({ data, page, pageSize, onPageChange, onPageSizeChange, total
         setOpenDialog(true);
     };
     const handleDelete = (id) => {
-        axios.delete(`https://localhost:7139/api/Post/delete-post-with-id/?id=${id}`)
-            .then((response) => {
-                console.log('Delete successful:', response.data);
-            })
-            .catch((error) => {
-                console.error('Error deleting:', error);
-            });
+        deletePost(id);
     };
 
     const handleCloseDialog = () => {
@@ -146,8 +164,8 @@ const PostTable = ({ data, page, pageSize, onPageChange, onPageSizeChange, total
                 count={totalCount}
                 rowsPerPage={pageSize}
                 page={page - 1}
-                onPageChange={onPageChange}
-                onRowsPerPageChange={onPageSizeChange}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handlePageSizeChange}
             />
         </div>
 
