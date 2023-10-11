@@ -33,11 +33,12 @@ const DetailsUser = () => {
         setUserData(response.data);
         const path =localStorage.setItem('path',window.location.pathname);
                 const token = localStorage.getItem('token');
+                const id = localStorage.getItem('id');
                 const firstname = localStorage.getItem('firstname');
                 const lastname = localStorage.getItem('lastname');
                 const role = localStorage.getItem('role');
                 const avatar = localStorage.getItem('avatar');
-                loginContext(token,firstname,lastname,role,avatar,path)
+                loginContext(token,id,firstname,lastname,role,avatar,path)
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
