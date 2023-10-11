@@ -46,13 +46,13 @@
     outline: #2D83B5 auto 1px;
 }
 .dashboard-content-input {
-    /* font-style: inherit;
+    font-style: inherit;
     font-variant: inherit;
     font-weight: inherit;
     font-stretch: inherit;
     line-height: inherit;
     font-family: inherit;
-    letter-spacing: inherit; */
+    letter-spacing: inherit;
     border: 0px;
     box-sizing: content-box;
     background: none transparent;   
@@ -62,8 +62,6 @@
     width: 100%;
     color: #000000;
     font-size: 0.75rem;
-    padding: 0.625rem;
-    user-select: text;
 }
 table {
     width: 100%;
@@ -173,7 +171,6 @@ td span {
   input[type="text"] {
     width: 100%;
     padding: 8px;
-    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }

@@ -9,6 +9,7 @@ import UserList from '../../components/Users/UserList'
 import UserForm from '../../components/Users/UserForm'
 import Pagination from '../../components/Users/Pagination'
 import { debounce } from 'lodash';
+import { CSVLink } from 'react-csv';
 function Users() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -21,7 +22,7 @@ function Users() {
     const [tiers, setTiers] = useState([]);
     const [filterOn, setFilterOn] = useState('');
     const [filterQuery, setFilterQuery] = useState('');
-
+    const [DataExport, setDataExport] = useState([]);
     const handleEdit = (user) => {
         setEditingUser(user);
         setIsEditing(true);
@@ -144,12 +145,53 @@ function Users() {
     const handlePageClick = (event) => {
         setCurrentPage(+event.selected + 1)
     }
+    const getUsersExport = async (event, done) => {
+        let results = [];
+        
+        try {
+          if (users && users.length > 0) {
+            results.push(["ID", "Tên", "Họ", "Ngày tinh", "Địa chỉ", "Giới tính", "Số điện thoại", "Vai Trò", "Gói sử dụng"]);
+            users.forEach((user) => {
+              let arr = [];
+              arr[0] = user.id;
+              arr[1] = user.firstname;
+              arr[2] = user.lastname;
+              arr[3] = user.birthday;
+              arr[4] = user.address;
+              arr[5] = user.gender ? 'Nam' : 'Nữ';
+              arr[6] = user.phone;
+              arr[7] = user.rolename;
+              arr[8] = user.tier;
+              results.push(arr);
+            });
+            
+            setDataExport(results);
+            done();
+          }
+        } catch (error) {
+          console.error("Error exporting CSV:", error);
+          done();
+        }
+      };
+      
     return (
         <div className='dashboard-content'>
-            <DashboardHeader btnText="Thêm người dùng" />
+            <DashboardHeader btnText={'Thêm người dùng'} />
 
             <div className='dashboard-content-container  relative'>
-            <div className='dashboard-content-search'>
+          
+                <div className='dashboard-content-header'>
+                    <h2 className='text-black'>Danh Sách Người Dùng</h2>
+                    <CSVLink
+  data={DataExport}
+  filename={"users.csv"}
+  className="btn bg-green-400"
+  asyncOnClick={true}
+  onClick={getUsersExport}
+>
+<i class="fa-solid fa-download"></i> Tải xuống
+</CSVLink>;
+                    <div className='dashboard-content-search'>
                         <input
                             type='text'
                             value={search}
@@ -157,10 +199,7 @@ function Users() {
                             className='dashboard-content-input'
                             onChange={e => __handleSearch(e)} />
                     </div>
-                <div className='dashboard-content-header'>
-                    <h2 className='text-black'>Danh Sách Người Dùng</h2>
-                    
-                    
+                   
                 </div>
                 
                 <UserList users={users} handleEdit={handleEdit} handleDelete={handleDelete} />
