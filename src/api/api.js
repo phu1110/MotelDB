@@ -65,18 +65,10 @@ export const deletePost = (id) => {
 export const getUserRole = (pagenumb, pageSize) => {
   return axios.get(`${API_BASE_URL}/User/get-role-users?pageNumber=${pagenumb}&pageSize=${pageSize}`);
 };
-    return axios.put(`${API_BASE_URL}/User/update-userbasic?id=${editingUser.id}`, {
-      ...editingUser,
-      gender: editingUser.gender === 'true',
-    });
-  };
   export const updateTier = (editingTier) => {
     return axios.put(`${API_BASE_URL}/Tiers/update-tier-id?id=${editingTier.id}`, {
       ...editingTier,
     });
-  };
-  export const deleteUser = (userId) => {
-    return axios.delete(`${API_BASE_URL}/User/delete-user-with-id?id=${userId}`);
   };
   export const deleteTier = (tierId) => {
     return axios.delete(`${API_BASE_URL}/Tiers/delete-tier-id?id=${tierId}`);

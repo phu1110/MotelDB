@@ -16,7 +16,6 @@ const AppRouter = () => {
   return (
     <Router>
   <ToastContainer />
-
       <Routes>
   
         <Route
