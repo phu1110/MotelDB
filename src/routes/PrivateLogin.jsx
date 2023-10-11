@@ -1,19 +1,18 @@
-import React from 'react'
-import { Navigate } from 'react-router-dom'
+import React from 'react';
+import { Navigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
+
 const PrivateLogin = (props) => {
-    const {user} = useContext(UserContext);
-   if(user.auth === true) 
-   return <>
- <Navigate to="/users" />;
-   </>
+  const { user } = useContext(UserContext);
 
-  return (
-    <>
-     {props.children}
-    </>
-  )
-}
+  if (user && user.auth === true) {
+    
+    const inforpath = user.path;
+    return <Navigate to={inforpath}/>;
+  }
 
-export default PrivateLogin
+  return <>{props.children}</>;
+};
+
+export default PrivateLogin;

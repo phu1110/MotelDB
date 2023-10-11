@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,6 +15,9 @@ const Login = () => {
     }
     const {loginContext} = useContext(UserContext);
     
+      // Lưu trang hiện tại vào localStorage khi component mount
+
+
     const handleLogin = async () => {
       setLoadingAPI(true);
         try {
@@ -27,6 +30,7 @@ const Login = () => {
           const lastname = response.data.lastName;
           const role = response.data.roleId;
           const avatar = response.data.avatar;
+          const path = localStorage.setItem('path', window.location.pathname);
           if( role === "1")
           {
             toast.success('Đăng nhập thành công', {
@@ -34,8 +38,10 @@ const Login = () => {
               autoClose: 3000, // Đóng thông báo sau 3 giây
               hideProgressBar: false,
           });
+          
           navigate('/users')
-          loginContext(token,id,firstname,lastname,role,avatar)
+          loginContext(token,id,firstname,lastname,role,avatar,path)
+
           }
           else{
             toast.error('Bạn không có quyền truy cập vào trang này', {

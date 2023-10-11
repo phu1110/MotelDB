@@ -1,19 +1,24 @@
 import React from 'react'
 
-const UserContext = React.createContext({ id : '', firstname : '', lastname: '',role: '', avatar: '',auth: false });
+
+const UserContext = React.createContext({ id : '', firstname : '', lastname: '',role: '', avatar: '',path:'',auth: false });
+
 
 // @function  UserProvider
 // Create function to provide UserContext
 const UserProvider = ({ children }) => {
-  const [user, setUser] = React.useState({ id : '', firstname : '', lastname: '',role: '', avatar: '',auth: false });
 
-  const loginContext = (token,id,firstname,lastname,role,avatar) => {
+  const [user, setUser] = React.useState({ id : '', firstname : '', lastname: '',role: '', avatar: '',path:'',auth: false });
+
+  const loginContext = (token,id,firstname,lastname,role,avatar,path) => {
+
     setUser((user) => ({
       id: id,
       firstname:firstname,
       lastname:lastname,
       role:role,
       avatar:avatar,
+      path:path,
       auth: true,
     }));
     localStorage.setItem('token',token);
@@ -31,12 +36,14 @@ const UserProvider = ({ children }) => {
     localStorage.removeItem('lastname');
     localStorage.removeItem('role');
     localStorage.removeItem('avatar');
+    localStorage.removeItem('path')
     setUser((user) => ({
       id : '',
       firstname:'',
       lastname:'',
       role:'',
       avatar:'',
+      path:'',
       auth: false,
     }));
   };
