@@ -1,37 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import fetchDataFromApi from '../../api/postget';
 import PostTable from '../../components/Post/PostTable';
-
+import DataGridPost from '../../components/Post/DataGridPost';
+import DashboardHeader from '../../components/DashboardHeader';
 import '../styles.css';
-
 function Post() {
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [data, setData] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-  
-    const handlePageChange = (event, newPage) => {
-        setPage(newPage + 1);
-      };
-    
-      const handlePageSizeChange = (event) => {
-        setPageSize(parseInt(event.target.value, 10));
-        setPage(1); // Reset to the first page when changing page size
-      };
-    useEffect(() => {
-        fetchDataFromApi(page, pageSize)
-            .then(apiData => {
-                setData(apiData.post);
-                setTotalCount(apiData.total);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-    }, [page, pageSize]);
     return (
         <div className='dashboard-content'>
-            <div className='dashboard-content-container'>
-                {/* <table>
+            {/* <div className='dashboard-content-container'>
+                <table>
                     <thead>
                         <th>ID</th>
                         <th>TITLE</th>
@@ -85,16 +61,11 @@ function Post() {
                         handleClose={handleCloseDialog}
                         rowData={selectedRowData}
                     />
-                )} */}
-                <PostTable 
-                    data={data}
-                    page={page}
-                    pageSize={pageSize}
-                    onPageChange={handlePageChange}
-                    onPageSizeChange={handlePageSizeChange} 
-                    totalCount={totalCount}
-                />
-            </div>
+                )}
+                <PostTable />
+            </div> */}
+            <DashboardHeader btnText="Thêm người dùng"/>
+            <DataGridPost/>
         </div>
     )
 }

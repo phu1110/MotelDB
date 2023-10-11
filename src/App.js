@@ -11,10 +11,8 @@ function App () {
   useEffect (() => {
     if(localStorage.getItem("token"))
     {
-      loginContext(localStorage.getItem("token"),localStorage.getItem("firstname"),localStorage.getItem("lastname"),localStorage.getItem("role"),localStorage.getItem("avatar")
-      ,localStorage.getItem("path")
-      );
-    }
+      loginContext(localStorage.getItem("token"),localStorage.getItem("id"),localStorage.getItem("firstname"),localStorage.getItem("lastname"),localStorage.getItem("role"),localStorage.getItem("avatar")
+   ,localStorage.getItem("path"));
   },[])
   return(
     <AppRouter/>

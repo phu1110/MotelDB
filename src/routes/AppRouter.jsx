@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import PrivateLogin from './PrivateLogin';
 import Post from '../pages/Post';
+import Role from '../pages/Role';
 import DetailsUser from '../components/Users/Details_User';
 import Tiers from '../pages/Tiers/Tier';
 import DetailTier from '../components/Tier/DetailTier';
@@ -46,6 +47,10 @@ const AppRouter = () => {
           path="/profile"
           element={<PrivateRoute><div></div></PrivateRoute>}
         />
+            <Route  path="/role" element={
+               <PrivateRoute>
+                <Role/>
+               </PrivateRoute>} />
         <Route
           path="/login"
           element={<PrivateLogin><Login /></PrivateLogin>}
@@ -53,9 +58,10 @@ const AppRouter = () => {
         <Route
           path="/register"
           element={<Register />}
-        />
+        />  
       </Routes>
 </Router>
+
   )
 }
 

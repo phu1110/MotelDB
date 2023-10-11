@@ -1,14 +1,19 @@
 import React from 'react'
 
-const UserContext = React.createContext({ firstname : '', lastname: '',role: '', avatar: '',path:'',auth: false });
+
+const UserContext = React.createContext({ id : '', firstname : '', lastname: '',role: '', avatar: '',path:'',auth: false });
+
 
 // @function  UserProvider
 // Create function to provide UserContext
 const UserProvider = ({ children }) => {
-  const [user, setUser] = React.useState({ firstname : '', lastname: '',role: '', avatar: '',path:'',auth: false });
 
-  const loginContext = (token,firstname,lastname,role,avatar,path) => {
+  const [user, setUser] = React.useState({ id : '', firstname : '', lastname: '',role: '', avatar: '',path:'',auth: false });
+
+  const loginContext = (token,id,firstname,lastname,role,avatar,path) => {
+
     setUser((user) => ({
+      id: id,
       firstname:firstname,
       lastname:lastname,
       role:role,
@@ -17,6 +22,7 @@ const UserProvider = ({ children }) => {
       auth: true,
     }));
     localStorage.setItem('token',token);
+    localStorage.setItem('id',id);
     localStorage.setItem('firstname',firstname);
     localStorage.setItem('lastname',lastname);
     localStorage.setItem('role',role);
@@ -25,12 +31,14 @@ const UserProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('id');
     localStorage.removeItem('firstname');
     localStorage.removeItem('lastname');
     localStorage.removeItem('role');
     localStorage.removeItem('avatar');
     localStorage.removeItem('path')
     setUser((user) => ({
+      id : '',
       firstname:'',
       lastname:'',
       role:'',
