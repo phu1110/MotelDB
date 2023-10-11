@@ -25,7 +25,7 @@ const Login = () => {
           const response = await loginapi(phone, password);
           // Lấy token từ response
           const token = response.data.token;
-          const id = response.data.userId;
+          const userid = response.data.userId;
           const firstname = response.data.firstName;
           const lastname = response.data.lastName;
           const role = response.data.roleId;
@@ -40,7 +40,7 @@ const Login = () => {
           });
           
           navigate('/users')
-          loginContext(token,id,firstname,lastname,role,avatar,path)
+          loginContext(token,userid,firstname,lastname,role,avatar,path)
 
           }
           else{

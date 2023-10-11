@@ -144,7 +144,6 @@ function Users() {
     const handlePageClick = (event) => {
         setCurrentPage(+event.selected + 1)
     }
-    const debouncedSearch = debounce(__handleSearch, 300);
     return (
         <div className='dashboard-content'>
             <DashboardHeader btnText="Thêm người dùng" />
