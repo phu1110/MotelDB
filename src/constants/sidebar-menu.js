@@ -31,16 +31,9 @@ const sidebar_menu = [
     {
         id: 5,
         icon: UserIcon,
-        path: '/profile',
+        path: '/role',
         title: 'Vai trò',
     },
-    {
-        id: 6,
-        icon: UserIcon,
-        path: '/role',
-        title: 'Role',
-    },
-    
 ]
 
 export default sidebar_menu;

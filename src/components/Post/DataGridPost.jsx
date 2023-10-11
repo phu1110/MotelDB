@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid';
 import { deletePost, getPostData } from '../../api/api';
 import Button from '@mui/material/Button';
 import EditDialog from '../../components/Post/EditPost_Dialog'
 import ApprovePost from '../../components/Post/ApprovePost';
-
 export default function DataGridPost() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -14,24 +13,30 @@ export default function DataGridPost() {
     const [openApproveDialog, setopenApproveDialog] = useState(false);
     const [selectedRowData, setSelectedRowData] = useState(null);
     const [selectedDataApprove, setselectedDataApprove] = useState(null);
-    
-    const handlePageChange = (event, newPage) => {
+
+    const handlePageChange = (newPage) => {
         setPage(newPage + 1);
+        loadData();
     };
 
-    const handlePageSizeChange = (event) => {
+    const handlePageSizeChange = async (event) => {
         setPageSize(parseInt(event.target.value, 10));
         setPage(1);
+        loadData();
     };
+    const loadData = async () => {
+        await getPostData(page, pageSize)
+        .then(apiData => {
+            setData(apiData.data.post);
+            setTotalCount(apiData.data.total);
+            console.log(apiData);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
     useEffect(() => {
-        getPostData(page, pageSize)
-            .then(apiData => {
-                setData(apiData.data.post);
-                setTotalCount(apiData.data.total);
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
+        loadData();
     }, [page, pageSize]);
 
 
@@ -147,7 +152,7 @@ export default function DataGridPost() {
         },
         {
             field: 'approve',
-            headerName: 'Quản lý duyệt',
+            headerName: 'Duyệt',
             width: 70,
             renderCell: (params) => (
                 <Button variant="outlined" color="primary" onClick={() => handleApproveDialog(params.row)}>
@@ -157,19 +162,21 @@ export default function DataGridPost() {
         },
     ];
     return (
-        <div>
+        <div style={{width: '100%', margin: 'auto'}}>
             <DataGrid
                 rows={data}
                 getRowHeight={() => 'auto'}
                 getRowId={(row) => row.id}
                 disableRowSelectionOnClick
+                pagination
                 columns={columns}
                 pageSize={pageSize}
-                page={page - 1}
-                onPageChange={handlePageChange}
-                onPageSizeChange={handlePageSizeChange}
-                pagination
+                page={page}
+                onPageChange={(page)=>handlePageChange}
+                onPageSizeChange={(pageSize)=>handlePageSizeChange}
                 pageSizeOptions={[1, 10, 25, 100]}
+                rowCount={totalCount}
+                slots={{ toolbar: () => <CustomToolbar data={data} columns={columns} /> }}
             />
             {selectedRowData && (
                 <EditDialog
@@ -187,4 +194,46 @@ export default function DataGridPost() {
             )}
         </div>
     )
+}
+function CustomToolbar({columns, data}){
+    const exportToCsv = () => {
+        const header = columns.map((column) => column.headerName).join(',');
+        const csv = [header];
+      
+        data.forEach((row) => {
+          const rowData = columns
+            .map((column) => {
+              let cellValue = row[column.field];
+      
+              // If the value is an array, join its elements with a delimiter (e.g., a comma)
+              if (Array.isArray(cellValue)) {
+                cellValue = cellValue.join(', ');
+              }
+      
+              // Check if the cell value is a string containing a comma or a line break
+              if (typeof cellValue === 'string' && (cellValue.includes(',') || cellValue.includes('\n'))) {
+                cellValue = `"${cellValue.replace(/"/g, '""')}"`; // Escape double quotes
+              }
+      
+              return cellValue;
+            })
+            .join(',');
+      
+          csv.push(rowData);
+        });
+      
+        const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', 'data.csv');
+        link.click();
+      };
+    return (
+        <GridToolbarContainer>
+          <Button variant="outlined" color="primary" onClick={exportToCsv}>
+            Export CSV
+          </Button>
+        </GridToolbarContainer>
+    );
 }

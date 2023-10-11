@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid';
 import { getUserRole, getRoles, putUserRole } from '../../api/api';
 import Autocomplete from '@mui/material/Autocomplete';
 import { TextField } from '@mui/material';
@@ -73,6 +73,7 @@ export default function DataGridRole() {
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setSelectedIds(newRowSelectionModel);
         }}
+        slots={{ toolbar: () => <CustomToolbar data={data} columns={columns} /> }}
       />
       <Autocomplete
         disablePortal
@@ -92,4 +93,46 @@ export default function DataGridRole() {
     </div>
 
   )
+}
+function CustomToolbar({columns, data}){
+  const exportToCsv = () => {
+      const header = columns.map((column) => column.headerName).join(',');
+      const csv = [header];
+    
+      data.forEach((row) => {
+        const rowData = columns
+          .map((column) => {
+            let cellValue = row[column.field];
+    
+            // If the value is an array, join its elements with a delimiter (e.g., a comma)
+            if (Array.isArray(cellValue)) {
+              cellValue = cellValue.join(', ');
+            }
+    
+            // Check if the cell value is a string containing a comma or a line break
+            if (typeof cellValue === 'string' && (cellValue.includes(',') || cellValue.includes('\n'))) {
+              cellValue = `"${cellValue.replace(/"/g, '""')}"`; // Escape double quotes
+            }
+    
+            return cellValue;
+          })
+          .join(',');
+    
+        csv.push(rowData);
+      });
+    
+      const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'data.csv');
+      link.click();
+    };
+  return (
+      <GridToolbarContainer>
+        <Button variant="outlined" color="primary" onClick={exportToCsv}>
+          Export CSV
+        </Button>
+      </GridToolbarContainer>
+  );
 }
