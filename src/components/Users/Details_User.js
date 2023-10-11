@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useParams } from 'react-router-dom';
 import { detailUser } from '../../api/api';
 import moment from 'moment';
-import Dislike from '../../assets/icons/dislike.svg'
 import { image } from '../../constants/URL'
+import { UserContext } from '../../context/UserContext';
+import { useContext } from 'react';
 function TruncatedText({ text, maxLength }) {
   if (text.length <= maxLength) {
     return (
@@ -23,22 +24,27 @@ function TruncatedText({ text, maxLength }) {
 const DetailsUser = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState(null);
-
+  const {logout,loginContext} = useContext(UserContext);
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         const response = await detailUser(id);
         // Lưu thông tin người dùng vào state
         setUserData(response.data);
-        console.log(response.data);
+        const path =localStorage.setItem('path',window.location.pathname);
+                const token = localStorage.getItem('token');
+                const firstname = localStorage.getItem('firstname');
+                const lastname = localStorage.getItem('lastname');
+                const role = localStorage.getItem('role');
+                const avatar = localStorage.getItem('avatar');
+                loginContext(token,firstname,lastname,role,avatar,path)
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
     };
-
-    // Gọi hàm để lấy chi tiết người dùng khi component được tạo ra
     fetchUserDetails();
-  }, [id]); // Chạy lại useEffect khi id thay đổi
+  }, [id]);
+             
   const calculateElapsedTime = (post) => {
     if (post && post.datecreatedroom) {
       const postDate = moment(post.datecreatedroom);
@@ -122,77 +128,51 @@ const DetailsUser = () => {
           <h2>Tin đã đăng</h2>
           <div>
           {userData.posts && userData.posts.length > 0 ? (
-            <div className='grid grid-cols-2 gap-4'>
-              {userData.posts.map((post) => (
-                <div key={post.id}>
-                 
-                  
-	<div class="  p-4 items-center justify-center w-[680px] rounded-xl group sm:flex space-x-6 bg-white bg-opacity-50 shadow-xl hover:rounded-2xl">
-  <img
-        className="mx-auto w-full block w-4/12 h-40 rounded-lg"
-        alt="art cover"
-        loading="lazy"
-        src={getImageUrl(post.actualFile)}
-      />
-		<div class="sm:w-8/12 pl-0 p-5">
-			<div class="space-y-2">
-				<div class="space-y-4">
-					<h4 class="text-md font-semibold text-cyan-900 text-justify">
-          {post.title}
-					</h4>
-				</div>
-        <div className="flex items-center justify-between gap-2 pl-[2px]">
-            <p className="price text-sky-400"> {post.price} VND</p>
-            <p className="acreage"> {post.area} m²  </p>
-            <p className="address decoration-black-600 hover:decoration-blue-400 cursor-pointer">
-            <TruncatedText text={post.address} maxLength={20} />
-            </p>
-          </div>
-				
-				<div class="flex items-center space-x-4 justify-between">
-					<div class="text-grey-500 flex flex-row space-x-1  my-4">
-						<svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-						<p class="text-xs">{calculateElapsedTime(post)}</p>
-					</div>
-					<div class="flex flex-row space-x-1">
-						
-            <div>
-              {post.status === 'Đang chờ duyệt' ?
-              <div
-							class="bg-red-500 shadow-lg shadow- shadow-red-600 text-white cursor-pointer px-3 py-1 text-center justify-center items-center rounded-xl flex space-x-2 flex-row">
-							<img src={Dislike} alt='like-icon' style={{ fill: 'white' }}></img>
-							<span>{post.status}</span>
-						</div>
-              : post.status === 'Đã Duyệt' ?
-              <div
-							class="bg-green-500 shadow-lg shadow- shadow-green-600 text-white cursor-pointer px-3 text-center justify-center items-center py-1 rounded-xl flex space-x-2 flex-row">
-	
-							<span>23</span>
-						</div>
-            : post.status === 'Hết Hạn' ?
-            <div
-            class="bg-gray-500 shadow-lg shadow- shadow-gray-600 text-black cursor-pointer px-3 text-center justify-center items-center py-1 rounded-xl flex space-x-2 flex-row">
+            <table>
+            <thead>
 
-            <span>23</span>
-          </div> : null}
-            </div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-                </div>
-              ))}
-            </div>
+                <th>ID</th>
+                <th>Tên</th>
+                <th>Ngày tạo</th>
+                <th>Địa chỉ</th>
+                <th>Trạng thái Tin</th>
+                <th>Giá </th>
+                <th>Diện tích </th>
+            </thead>
+              
+                   
+                      
+                           <tbody>
+                           {userData.posts.map((post) => (
+                               <tr key={post.id}>
+                                   <td><span>{post.id}</span></td>
+                                   <td>
+                                       <div>
+                                           {/* {post.actualFile && (<img
+                                               src={`${image}/${post.actualFile}`}
+                                               className="dashboard-content-avatar "
+                                               alt="not found"
+                                           />)} */}
+                                           <span>{post.title}</span>
+                                       </div>
+                                   </td>
+                                   <td><span>{calculateElapsedTime(post)}</span></td>
+                                   <td><span>{post.address}</span></td>
+                                   <td><span>{post.isHire ? "Đã được thuê" : "chưa được thuê"}</span></td>
+                                   <td><span>{post.price}</span></td>
+                                   <td><span>{post.area}m²</span></td>
+                               </tr>
+                               ))}
+                           </tbody>                           
+           </table>
           ) : (
-            <p>No posts available for this user.</p>
+            <p>Không có bài đăng nào thuộc người dùng này</p>
           )}
           </div>
         </div>
         
       ) : (
-        <p>Loading user details...</p>
+        <p>Đang lấy thông tin đợi chút nha </p>
       )}
     </div>
   );

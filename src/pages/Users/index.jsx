@@ -8,6 +8,7 @@ import ConfirmationModal from '../../components/Users/ConfirmationModal'
 import UserList from '../../components/Users/UserList'
 import UserForm from '../../components/Users/UserForm'
 import Pagination from '../../components/Users/Pagination'
+import { debounce } from 'lodash';
 function Users() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -18,6 +19,9 @@ function Users() {
     const [isEditing, setIsEditing] = useState(false);
     const [roles, setRoles] = useState([]);
     const [tiers, setTiers] = useState([]);
+    const [filterOn, setFilterOn] = useState('');
+    const [filterQuery, setFilterQuery] = useState('');
+
     const handleEdit = (user) => {
         setEditingUser(user);
         setIsEditing(true);
@@ -55,7 +59,7 @@ function Users() {
     };
     const fetchData = async () => {
         try {
-            const userResponse = await getUsers(currentPage);
+            const userResponse = await getUsers(currentPage,filterOn, filterQuery);
             setUsers(userResponse.data.users);
             setTotalPages(userResponse.data.totalPages);
 
@@ -71,7 +75,7 @@ function Users() {
 
     useEffect(() => {
         fetchData();
-    }, [currentPage]);
+    }, [currentPage,filterOn, filterQuery]);
     const handleDelete = (userId) => {
         // Hiển thị toast để xác nhận trước khi xóa
         toast.info(
@@ -116,48 +120,47 @@ function Users() {
         toast.dismiss();
     };
     const __handleSearch = (event) => {
-        const searchTerm = event.target.value.toLowerCase();
+        const searchTerm = event.target.value;
         setSearch(searchTerm);
-
+      
         if (searchTerm !== '') {
-            let search_results = users.filter((user) =>
-                user.lastname.toLowerCase().includes(searchTerm) ||
-                user.firstname.toLowerCase().includes(searchTerm)
-            );
-            setUsers(search_results);
-            setTotalPages(1); // Reset total pages when search results change
-            setCurrentPage(1); // Reset current page to 1 when search results change
+          // Gọi API filter từ phía backend
+          axios.get(`https://localhost:7139/api/User/get-all-users?pageNumber=${currentPage}&pageSize=5&filterOn=firstname&filterQuery=${searchTerm}`)
+            .then((response) => {
+              const userData = response.data.users;
+              setUsers(userData);
+              setTotalPages(response.data.totalPages);
+              setCurrentPage(1); // Reset current page to 1 when search results change
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         } else {
-            axios.get(`https://localhost:7139/api/User/get-all-users?pageNumber=${currentPage}&pageSize=5`)
-                .then((response) => {
-                    const userData = response.data.users;
-                    setUsers(userData);
-                    setTotalPages(response.data.totalPages);
-
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+          // Nếu không có giá trị tìm kiếm, gọi API để lấy tất cả dữ liệu
+          fetchData();
         }
-    };
+      };
+      
     const handlePageClick = (event) => {
         setCurrentPage(+event.selected + 1)
     }
+    const debouncedSearch = debounce(__handleSearch, 300);
     return (
         <div className='dashboard-content'>
             <DashboardHeader btnText="Thêm người dùng" />
 
             <div className='dashboard-content-container  relative'>
-                <div className='dashboard-content-header'>
-                    <h2 className='text-white'>Danh Sách Người Dùng</h2>
-                    <div className='dashboard-content-search'>
+            <div className='dashboard-content-search'>
                         <input
                             type='text'
                             value={search}
-                            placeholder='Search..'
+                            placeholder='tìm kiếm..'
                             className='dashboard-content-input'
                             onChange={e => __handleSearch(e)} />
                     </div>
+                <div className='dashboard-content-header'>
+                    <h2 className='text-black'>Danh Sách Người Dùng</h2>
+                    
                     
                 </div>
                 

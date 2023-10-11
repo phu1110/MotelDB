@@ -3,6 +3,10 @@ import { image } from '../../constants/URL'
 import { Link } from 'react-router-dom';
 function TierList({ tiers, handleEdit, handleDelete }) {
     const [loadingapi, setLoadingAPI] = useState(true);
+    const [path, setPath] = useState(localStorage.getItem('path'));
+    const handleDeletePath = () => {
+        setPath(localStorage.removeItem('path')); 
+      }; 
     if (!tiers || tiers.length === 0) {
         return <div className="flex items-center justify-center">
             {loadingapi &&  <i className="fas fa-circle-notch fa-spin"></i> }
@@ -38,7 +42,7 @@ function TierList({ tiers, handleEdit, handleDelete }) {
                         </td>
                         <td>
                             <Link to={`/tier/${tier.id}`}>
-                            <button className="bg-gray-400 text-black" >
+                            <button className="bg-gray-400 text-black"onClick={handleDeletePath} >
                                 Chi tiết
                             </button>
                             </Link>

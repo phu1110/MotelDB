@@ -1,11 +1,15 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { image } from '../../constants/URL'
 import { Link } from 'react-router-dom';
 function UserList({ users, handleEdit, handleDelete }) {
     const [loadingapi, setLoadingAPI] = useState(true);
+    const [path, setPath] = useState(localStorage.getItem('path'));
+    const handleDeletePath = () => {
+        setPath(localStorage.removeItem('path'));
+    };
     if (!users || users.length === 0) {
         return <div className="flex items-center justify-center">
-            {loadingapi &&  <i className="fas fa-circle-notch fa-spin"></i> }
+            {loadingapi && <i className="fas fa-circle-notch fa-spin"></i>}
         </div>;
     }
 
@@ -57,10 +61,10 @@ function UserList({ users, handleEdit, handleDelete }) {
                             </button>
                         </td>
                         <td>
-                            <Link to={`/users/${user.id}`}>
-                            <button className="bg-gray-400 text-black" >
-                                Chi tiết
-                            </button>
+                            <Link to={`/users/${user.id}`} >
+                                <button className="bg-gray-400 text-black" onClick={handleDeletePath}>
+                                    Chi tiết
+                                </button>
                             </Link>
                         </td>
 

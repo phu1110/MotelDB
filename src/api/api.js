@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { API_BASE_URL } from '../constants/URL';
 
-export const getUsers = (currentPage) => {
-  return axios.get(`${API_BASE_URL}/User/get-all-users?pageNumber=${currentPage}&pageSize=5`);
+export const getUsers = (currentPage, filterOn, filterQuery) => {
+  return axios.get(
+    `${API_BASE_URL}/User/get-all-users?pageNumber=${currentPage}&pageSize=5&filterOn=${filterOn}&filterQuery=${filterQuery}`
+  );
 };
 
 export const getTiers = (currentPage) => {

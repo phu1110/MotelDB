@@ -2,8 +2,8 @@ import ReactPaginate from "react-paginate";
 function Pagination({ totalPages, handlePageClick }) {
     return (
         <ReactPaginate
-            previousLabel={'previous'}
-            nextLabel={'next'}
+            previousLabel={'Trang trước'}
+            nextLabel={'Trang sau'}
             breakLabel={'...'}
             pageCount={totalPages}
             marginPagesDisplayed={2}
