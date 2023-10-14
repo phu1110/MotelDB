@@ -63,10 +63,10 @@ function Users() {
             const userResponse = await getUsers(currentPage,filterOn, filterQuery);
             setUsers(userResponse.data.users);
             setTotalPages(userResponse.data.totalPages);
-
+            
             const tierResponse = await getTiers(currentPage);
             setTiers(tierResponse.data.tiers);
-            setTotalPages(tierResponse.data.totalPages);
+            // setTotalPages(tierResponse.data.totalPages);
             const roleResponse = await getRoles();
             setRoles(roleResponse.data);
         } catch (error) {
