@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import PostTable from '../../components/Post/PostTable';
 import DataGridPost from '../../components/Post/DataGridPost';
 import DashboardHeader from '../../components/DashboardHeader';
+import Container from '@mui/material/Container';
 import '../styles.css';
 function Post() {
     return (
-        <div className='dashboard-content'>
+<Container maxWidth="xl"><div className='dashboard-content'>
             {/* <div className='dashboard-content-container'>
                 <table>
                     <thead>
@@ -67,6 +68,8 @@ function Post() {
             <DashboardHeader btnText="Thêm người dùng"/>
             <DataGridPost/>
         </div>
+        </Container>
+        
     )
 }
 
