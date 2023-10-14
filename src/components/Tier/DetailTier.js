@@ -101,7 +101,7 @@ const DetailsTier = () => {
                     <div style={{ width: '98%', height: '5px', backgroundColor: 'black' }} className="my-6 mx-auto"></div>
                     <h2>Tin đã đăng</h2>
                     <div>
-                        {tierData.users && tierData.users.length > 0 ? (
+                        {tierData.listUsers && tierData.listUsers.length > 0 ? (
                              <table>
                              <thead>
 
@@ -112,11 +112,8 @@ const DetailsTier = () => {
                                  <th>Giới tính</th>
                                  <th>Số Điện Thoại</th>
                              </thead>
-                               
-                                    
-                                       
                                             <tbody>
-                                            {tierData.users.map((user) => (
+                                            {tierData.listUsers.map((user) => (
                                                 <tr key={user.id}>
                                                     <td><span>{user.id}</span></td>
                                                     <td>
