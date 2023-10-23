@@ -30,7 +30,7 @@ function UserList({ users, handleEdit, handleDelete }) {
                 <th>Chi tiết</th>
             </thead>
             <tbody>
-                {users.map((user, index) => (
+                {users.length > 0 ? (users.map((user, index) => (
                     <tr key={index}>
                         <td><span>{user.id}</span></td>
                         <td>
@@ -70,7 +70,7 @@ function UserList({ users, handleEdit, handleDelete }) {
 
 
                     </tr>
-                ))}
+                ))):null}
             </tbody>
         </table>
     );

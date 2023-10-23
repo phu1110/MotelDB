@@ -6,6 +6,9 @@ import EditDialog from '../../components/Post/EditPost_Dialog'
 import ApprovePost from '../../components/Post/ApprovePost';
 import ConfirmationModal from '../../components/Users/ConfirmationModal'
 import { toast } from 'react-toastify';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 export default function DataGridPost() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
@@ -20,13 +23,18 @@ export default function DataGridPost() {
     const [sortby, setSortBy] = useState('dateCreated');
     const [isAscending, setisAscending] = useState(null);
     const [hireState, setHireState] = useState(null);
-    const [statusState, setstatusState] = useState(null);
+    const [statusState, setstatusState] = useState('Đang Chờ Duyệt');
     const [minPrice, setminPrice] = useState(null);
     const [maxPrice, setmaxPrice] = useState(null);
     const [minArea, setminArea] = useState(null);
     const [maxArea, setmaxArea] = useState(null);
     const [category, setcategory] = useState(null);
     const [isVip, setisVip] = useState(null);
+    const [phoneNumb, setphoneNumb] = useState(null);
+    const [address, setaddress] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [isApply, setisApply] = useState(false);
+    const [typeSearch, settypeSearch] = useState(null);
     const toggleShowMore = (rowId) => {
         setShowMoreStates((prevShowMoreStates) => ({
             ...prevShowMoreStates,
@@ -35,37 +43,41 @@ export default function DataGridPost() {
     };
     const handleFirstPage = () => {
         setPage(1);
-        loadData(page, pageSize);
+        loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, page, pageSize);
     };
     const handleLastPage = () => {
         setPage(totalPage);
-        loadData(page, pageSize);
+        loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, page, pageSize);
     };
     const handlePageSizeChange = (newPageSize) => {
         if (newPageSize >= 1) {
             setPageSize(newPageSize);
             setPage(1);
-            loadData(1, newPageSize);
+            loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, 1, newPageSize);
         }
     };
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPage) {
             setPage(newPage);
-            loadData(newPage, pageSize);
+            loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, newPage, pageSize);
         }
     };
 
-    const loadData = (hireState, statusState,minPrice, maxPrice,minArea,maxArea,category,isVip,sortby,isAscending,page, pageSize) => {
-             getPostData(hireState, statusState,minPrice, maxPrice,minArea,maxArea,category,isVip,sortby,isAscending,page, pageSize)
-            .then(apiData => {
-                setData(apiData.data.post);
-                setTotalCount(apiData.data.total);
-                setTotalPage(apiData.data.totalPages);
-                console.log(apiData);
-            });
+    const loadData = async (hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, page, pageSize) => {
+        await setLoading(true);
+        setTimeout(() => {
+            getPostData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, page, pageSize)
+                .then(apiData => {
+                    setData(apiData.data.post);
+                    setTotalCount(apiData.data.total);
+                    setTotalPage(apiData.data.totalPages);
+                    console.log(apiData);
+                }); setLoading(false);
+        }, 3000)
+
     }
     useEffect(() => {
-        loadData(hireState, statusState,minPrice, maxPrice,minArea,maxArea,category,isVip,sortby,isAscending,page, pageSize);
+        loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, page, pageSize);
     }, []);
 
     const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
@@ -115,7 +127,7 @@ export default function DataGridPost() {
     };
 
     const handleCloseDialog = () => {
-        loadData(page, pageSize);
+        loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, page, pageSize);
         setselectedDataApprove(null);
         setOpenDialog(false);
         setopenApproveDialog(false)
@@ -124,16 +136,16 @@ export default function DataGridPost() {
         {
             field: 'id',
             headerName: 'ID',
-            width: 90,
+            width: 50,
         },
         {
             field: 'title',
             headerName: 'Tiêu Đề',
-            width: 200,
+            width: 150,
         },
         {
-            field: 'actualFile',
-            headerName: 'Số Ảnh',
+            field: 'phone',
+            headerName: 'SĐT',
             width: 100,
         },
         {
@@ -169,7 +181,7 @@ export default function DataGridPost() {
         {
             field: 'area',
             headerName: 'Diện Tích',
-            width: 150,
+            width: 60,
             renderCell: (params) => (
                 params.value + " m2"
             ),
@@ -177,7 +189,7 @@ export default function DataGridPost() {
         {
             field: 'categorylist',
             headerName: 'Danh Mục',
-            width: 150,
+            width: 130,
             renderCell: (params) => (
                 params.value.join(', ')
             ),
@@ -185,12 +197,12 @@ export default function DataGridPost() {
         {
             field: 'formattedDatecreated',
             headerName: 'Ngày Tạo',
-            width: 150,
+            width: 92,
         },
         {
             field: 'formattedDateapprove',
             headerName: 'Ngày Duyệt',
-            width: 150,
+            width: 92,
             renderCell: (params) => (
                 params.value !== null ? params.value : 'Chưa có ngày duyệt'
             ),
@@ -198,65 +210,134 @@ export default function DataGridPost() {
         {
             field: 'price',
             headerName: 'Giá',
-            width: 150,
+            width: 100,
         },
         {
             field: 'status',
             headerName: 'Trạng Thái Duyệt',
-            width: 150,
+            width: 100,
         },
         {
             field: 'isHire',
             headerName: 'Trạng Thái Thuê',
-            width: 150,
+            width: 100,
         },
         {
             field: 'authorname',
             headerName: 'Chủ Trọ',
-            width: 150,
+            width: 120,
         },
         {
             field: 'edit',
             headerName: 'Sửa',
-            width: 70,
+            width: 65,
             sortable: false,
             renderCell: (params) => (
-                <Button variant="contained" color="success" onClick={() => handleEditDialog(params.row)}>Sửa</Button>
+                <Button variant="contained" color="success" style={{ height: "40px" }} onClick={() => handleEditDialog(params.row)}>Sửa</Button>
             ),
+            align: 'center',
         },
         {
             field: 'delete',
             headerName: 'Xoá',
-            width: 70,
+            width: 65,
             sortable: false,
             renderCell: (params) => (
-                <Button variant="outlined" color="error" onClick={() => handleDelete(params.row.id)}>Xoá</Button>
+                <Button variant="outlined" color="error" style={{ height: "40px" }} onClick={() => handleDelete(params.row.id)}>Xoá</Button>
             ),
+            align: 'center',
         },
         {
             field: 'approve',
             headerName: 'Duyệt',
-            width: 70,
+            width: 65,
             renderCell: (params) => (
-                <Button variant="outlined" color="primary" onClick={() => handleApproveDialog(params.row)}>
+                <Button variant="outlined" color="primary" style={{ height: "40px" }} onClick={() => handleApproveDialog(params.row)}>
                     Duyệt
                 </Button>
             ),
+            align: 'center',
         },
     ];
+    const statusOptions = [
+        'Đã Duyệt', 'Không Chấp Nhận Duyệt', 'Đang Chờ Duyệt', 'Đã Ẩn'
+    ];
+    const isHireOptions = [
+        'Chưa Được Thuê', 'Đã Được Thuê'
+    ];
+    const searchTypeOptions = [
+        'Theo Địa Chỉ', 'Theo Số Điện Thoại'
+    ];
+    const handlestatusChange = (event, newValue) => {
+        setstatusState(newValue);
+        console.log(statusState);
+        setisApply(true);
+    };
+    const handleisHireChange = (event, newValue) => {
+        setHireState(newValue);
+        console.log(newValue);
+        setisApply(true);
+    };
+    const handleTypeSearch = (event, newValue) => {
+        setstatusState(null);
+        setSortBy(null);
+        setisAscending(null);
+        settypeSearch(newValue);
+        setisApply(true);
+    }
+    const handlesearchText = (e) => {
+        setphoneNumb(e.target.value);
+        setaddress(e.target.value);
+        setisApply(true);
+    }
+    const handlSearch = () => {
+        if (typeSearch === 'Theo Địa Chỉ') {
+            setphoneNumb(null);
+            loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, null, address, sortby, isAscending, page, pageSize);
+        }
+        if (typeSearch === 'Theo Số Điện Thoại')
+        {
+            setaddress(null);
+            loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, null, sortby, isAscending, page, pageSize);
+        }
+        else{
+            if(statusState === null){
+                loadData(hireState, null, minPrice, maxPrice, minArea, maxArea, category, isVip, null, null, sortby, isAscending, page, pageSize);
+            }
+            if (hireState === null){
+                loadData(null, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, null, null, sortby, isAscending, page, pageSize);
+            }
+            else{
+                loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, null, null, sortby, isAscending, page, pageSize);
+            }
+        }
+    }
+    const handlereset = () => {
+        setaddress(null)
+        setphoneNumb(null);
+        settypeSearch(null);
+        setHireState(null);
+        setstatusState('Đang Chờ Duyệt');
+        setisApply(false);
+        loadData(hireState, statusState, minPrice, maxPrice, minArea, maxArea, category, isVip, phoneNumb, address, sortby, isAscending, page, pageSize);
+    }
     return (
         <div style={{ width: '100%', margin: 'auto' }}>
             <DataGrid
-                rows={data}
+                rows={data || []}
                 getRowHeight={() => 'auto'}
                 getRowId={(row) => row.id}
                 disableRowSelectionOnClick
                 columns={columns}
                 hideFooterPagination={true}
-                slots={{ toolbar: () => <CustomToolbar data={data} columns={columns} /> }}
+                slots={{
+                    toolbar: () => <CustomToolbar data={data} columns={columns} />,
+
+                }}
+                loading={loading}
             />
             <div className="w-full flex justify-end mt-4 space-x-4">
-            <Button variant="contained" color="primary" onClick={() => handleFirstPage()} disabled={page === 1}>
+                <Button variant="contained" color="primary" onClick={() => handleFirstPage()} disabled={page === 1}>
                     Trang Đầu
                 </Button>
                 {pageNumbers.map((pageNumber) => (
@@ -265,12 +346,12 @@ export default function DataGridPost() {
                         key={pageNumber}
                         onClick={() => handlePageChange(pageNumber)}
                         className={pageNumber === page ? 'active' : ''}
-                        disabled={pageNumber === page }
+                        disabled={pageNumber === page}
                     >
                         {pageNumber}
                     </Button>
                 ))}
-                <Button variant="outlined" color="secondary" onClick={() => handleLastPage()} disabled={page === totalPage }>
+                <Button variant="outlined" color="secondary" onClick={() => handleLastPage()} disabled={page === totalPage}>
                     Trang Cuối
                 </Button>
                 <select onChange={(e) => handlePageSizeChange(parseInt(e.target.value))} value={pageSize}>
@@ -295,17 +376,77 @@ export default function DataGridPost() {
                     rowData={selectedDataApprove}
                 />
             )}
-            <input
-  type="text"
-  placeholder="Search..."
-  //value={searchQuery}
-  //onChange={(e) => setSearchQuery(e.target.value)}
-/>
+            <div className="flex items-center space-x-4 mt-4">
+                <div className="w-1/4">
+                    <TextField
+                        label="Ô tìm kiếm"
+                        id="standard-basic"
+                        //   value={searchQuery}
+                        onChange={handlesearchText}
+                    />
+                </div>
+                <div className="w-1/4">
+                    Tìm theo
+                </div>
+                <div className="w-1/4">
+                    <Autocomplete
+                        options={searchTypeOptions}
+                        getOptionLabel={(option) => option}
+                        //value={typeSearch}
+                        onChange={handleTypeSearch}
+                        renderInput={(searchTypeOptions) => (
+                            <TextField {...searchTypeOptions} label="Loại tìm kiếm" inputProps={{
+                                ...searchTypeOptions.inputProps,
+                                readOnly: true,
+                            }} />
+
+                        )}
+                    />
+                </div>
+                <div className="w-1/4">
+                    <Autocomplete
+                        options={statusOptions}
+                        getOptionLabel={(option) => option}
+                        //   value={selectedStatus}
+                        onChange={handlestatusChange}
+                        renderInput={(params) => (
+                            <TextField {...params} label="Trạng thái duyệt" inputProps={{
+                                ...params.inputProps,
+                                readOnly: true,
+                            }} />
+                        )}
+                    />
+                </div>
+                <div className="w-1/4">
+                    <Autocomplete
+                        options={isHireOptions}
+                        getOptionLabel={(option) => option}
+                        //   value={selectedCategory}
+                        onChange={handleisHireChange}
+                        renderInput={(params) => (
+                            <TextField {...params} label="Trạng thái thuê" inputProps={{
+                                ...params.inputProps,
+                                readOnly: true,
+                            }} />
+                        )}
+                    />
+                </div>
+                <div className="w-1/4">
+                    <Button variant="contained" color="primary" disabled={isApply === false} onClick={() => handlSearch()}>
+                        Tìm Kiếm
+                    </Button>
+                </div>
+                <div className="w-1/4">
+                    <Button variant="contained" color="primary" disabled={isApply === false} onClick={()=> handlereset()}>
+                        Reset Trạng Thái
+                    </Button>
+                </div>
+            </div>
         </div>
 
     )
 }
-function CustomToolbar({ columns, data }) {
+function CustomToolbar({ columns, data, handlenotHire, handleStatus }) {
     const exportToCsv = () => {
         const excludedColumns = ['actualFile', 'edit', 'delete', 'approve'];
         const exportColumns = columns.filter((column) => !excludedColumns.includes(column.field));
@@ -349,3 +490,4 @@ function CustomToolbar({ columns, data }) {
         </GridToolbarContainer>
     );
 }
+

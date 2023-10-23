@@ -2,8 +2,19 @@ import axios from 'axios';
 import { API_BASE_URL } from '../constants/URL';
 
 export const getUsers = (currentPage, filterOn, filterQuery) => {
+  const queryParams = [];
+  if (currentPage !== null && currentPage !== undefined) {
+    queryParams.push(`pageNumber=${currentPage}`);
+  }
+  if (filterOn !== null && filterOn !== undefined) {
+    queryParams.push(`filterOn=${filterOn}`);
+  }
+  if (filterQuery !== null && filterQuery !== undefined) {
+    queryParams.push(`filterQuery=${filterQuery}`);
+  }
+  const queryString = queryParams.join('&');
   return axios.get(
-    `${API_BASE_URL}/User/get-all-users?pageNumber=${currentPage}&pageSize=5&filterOn=${filterOn}&filterQuery=${filterQuery}`
+    `${API_BASE_URL}/User/get-all-users?${queryString}&pageSize=5`
   );
 };
 
@@ -29,7 +40,7 @@ export const deleteUser = (userId) => {
 export const getCategoryData = () => {
   return axios.get(`${API_BASE_URL}/Category/get-all-category`);
 }
-export const getPostData = (hireState,statusState,minPrice,maxPrice,minArea,maxArea,category,isVip,sortBy,isAscending, pagenumb, pageSize) =>{
+export const getPostData = (hireState,statusState,minPrice,maxPrice,minArea,maxArea,category,isVip,phoneNumb,address,sortBy,isAscending, pagenumb, pageSize) =>{
   const queryParams = [];
   if (hireState !== null && hireState !== undefined) {
     queryParams.push(`hireState=${hireState}`);
@@ -61,6 +72,12 @@ export const getPostData = (hireState,statusState,minPrice,maxPrice,minArea,maxA
 
   if (isVip !== null && isVip !== undefined) {
     queryParams.push(`isVip=${isVip}`);
+  }
+  if (phoneNumb !== null && phoneNumb !== undefined) {
+    queryParams.push(`phoneNumb=${phoneNumb}`);
+  }
+  if (address !== null && address !== undefined) {
+    queryParams.push(`address=${address}`);
   }
 
   if (sortBy !== null && sortBy !== undefined) {
