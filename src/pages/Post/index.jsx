@@ -6,7 +6,8 @@ import Container from '@mui/material/Container';
 import '../styles.css';
 function Post() {
     return (
-<Container maxWidth="xl"><div className='dashboard-content'>
+    <Container maxWidth="xl">
+    <div className='dashboard-content'>
             {/* <div className='dashboard-content-container'>
                 <table>
                     <thead>
