@@ -3,7 +3,7 @@ import React from 'react'
 const ConfirmationModal = ({ handleDeleteConfirmed, hideToast }) => {
   return (
     <div className="confirmation-modal">
-      <p>Bạn có chắc chắn muốn xóa?</p>
+      <p>Bạn có chắc chắn muốn thực hiện thao tác này?</p>
       <div className='flex gap-2'> 
         <button className="bg-rose-600 text-white" onClick={handleDeleteConfirmed}>
           Xác nhận

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { toast } from 'react-toastify';
 import { UserContext } from '../../context/UserContext';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,6 +9,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { putApprovePost } from '../../api/api';
+import { Container } from 'postcss';
 
 function ApprovePost({ open, handleClose, rowData }) {
     const { user } = useContext(UserContext);
@@ -23,23 +25,33 @@ function ApprovePost({ open, handleClose, rowData }) {
         setTextFieldValue(event.target.value);
     };
     const handleSave = async () => {
+        let date = new Date();
+        let dateString = date.toISOString();
         const data = {
-            userAdminId : user.id,
+            userAdminId : user.userid,
             status : editedData.status,
             reason: reasonField,
-            dateApproved : null,
+            dateApproved : dateString,
         }
-        putApprovePost(editedData.id, data)
-          .then(response => {
-            console.log('PUT request successful', response);
-          })
-          .catch(error => {
-            console.error('Error making PUT request', error);
-          });
+        console.log(data.userAdminId,data.status,data.reason, data.dateApproved)
+        const response =  await putApprovePost(editedData.id, data);
+          if(response){
+            toast.success('Cập nhật thành công', {
+              position: 'top-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+          })}
+          else{
+            toast.error('Lỗi update không thành công vui lòng kiểm tra lại', {
+              position: 'top-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+          })}
+          handleClose();
     };
     return (
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Duyệt Tin</DialogTitle>
+        <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="md">
+            <DialogTitle className="bg-blue-500 text-white p-2">Duyệt Tin</DialogTitle>
             <DialogContent>
                 {/* <TextField
                     InputProps={{
@@ -68,6 +80,7 @@ function ApprovePost({ open, handleClose, rowData }) {
                     value={editedData.authorname}
                     onChange={(e) => setEditedData({ ...editedData, authorname: e.target.value })}
                 /> */}
+                <div className="mb-4">
                 <Autocomplete
                     disablePortal
                     id="combo-box-demo"
@@ -75,22 +88,26 @@ function ApprovePost({ open, handleClose, rowData }) {
                     getOptionLabel={(option) => option}
                     value={editedData.status}
                     disableClearable={true}
+                    className="mt-4"
                     onChange={handlestatusChange}
                     renderInput={(statusOption) => (<TextField {...statusOption} label="Trạng Thái Duyệt" inputProps={{
                         ...statusOption.inputProps,
                         readOnly: true,
                     }} />)}
                 />
+                </div>
+                <div className="mb-4">
                 {editedData.status === "Không Chấp Nhận Duyệt" && (
                     <TextField
                         label="Lý Do Không Duyệt"
                         fullWidth
                         multiline
                         rows={4}
-                        value={reasonField}
+                        value={editedData.reason}
                         onChange={handleReasonTextChange}
                     />
                 )}
+                </div>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} color="primary">

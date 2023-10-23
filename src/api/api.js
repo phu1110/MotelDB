@@ -2,8 +2,19 @@ import axios from 'axios';
 import { API_BASE_URL } from '../constants/URL';
 
 export const getUsers = (currentPage, filterOn, filterQuery) => {
+  const queryParams = [];
+  if (currentPage !== null && currentPage !== undefined) {
+    queryParams.push(`pageNumber=${currentPage}`);
+  }
+  if (filterOn !== null && filterOn !== undefined) {
+    queryParams.push(`filterOn=${filterOn}`);
+  }
+  if (filterQuery !== null && filterQuery !== undefined) {
+    queryParams.push(`filterQuery=${filterQuery}`);
+  }
+  const queryString = queryParams.join('&');
   return axios.get(
-    `${API_BASE_URL}/User/get-all-users?pageNumber=${currentPage}&pageSize=5&filterOn=${filterOn}&filterQuery=${filterQuery}`
+    `${API_BASE_URL}/User/get-all-users?${queryString}&pageSize=5`
   );
 };
 
@@ -29,8 +40,63 @@ export const deleteUser = (userId) => {
 export const getCategoryData = () => {
   return axios.get(`${API_BASE_URL}/Category/get-all-category`);
 }
-export const getPostData = (pagenumb, pageSize) =>{
-  return axios.get(`${API_BASE_URL}/Post/Get-all-post-admin?pageNumber=${pagenumb}&pageSize=${pageSize}`);
+export const getPostData = (hireState,statusState,minPrice,maxPrice,minArea,maxArea,category,isVip,phoneNumb,address,sortBy,isAscending, pagenumb, pageSize) =>{
+  const queryParams = [];
+  if (hireState !== null && hireState !== undefined) {
+    queryParams.push(`hireState=${hireState}`);
+  }
+
+  if (statusState !== null && statusState !== undefined) {
+    queryParams.push(`statusState=${statusState}`);
+  }
+
+  if (minPrice !== null && minPrice !== undefined) {
+    queryParams.push(`minPrice=${minPrice}`);
+  }
+
+  if (maxPrice !== null && maxPrice !== undefined) {
+    queryParams.push(`maxPrice=${maxPrice}`);
+  }
+
+  if (minArea !== null && minArea !== undefined) {
+    queryParams.push(`minArea=${minArea}`);
+  }
+
+  if (maxArea !== null && maxArea !== undefined) {
+    queryParams.push(`maxArea=${maxArea}`);
+  }
+
+  if (category !== null && category !== undefined) {
+    queryParams.push(`category=${category}`);
+  }
+
+  if (isVip !== null && isVip !== undefined) {
+    queryParams.push(`isVip=${isVip}`);
+  }
+  if (phoneNumb !== null && phoneNumb !== undefined) {
+    queryParams.push(`phoneNumb=${phoneNumb}`);
+  }
+  if (address !== null && address !== undefined) {
+    queryParams.push(`address=${address}`);
+  }
+
+  if (sortBy !== null && sortBy !== undefined) {
+    queryParams.push(`sortBy=${sortBy}`);
+  }
+
+  if (isAscending !== null && isAscending !== undefined) {
+    queryParams.push(`isAscending=${isAscending}`);
+  }
+
+  if (pagenumb !== null && pagenumb !== undefined) {
+    queryParams.push(`pageNumber=${pagenumb}`);
+  }
+
+  if (pageSize !== null && pageSize !== undefined) {
+    queryParams.push(`pageSize=${pageSize}`);
+  }
+  const queryString = queryParams.join('&');
+  return axios.get(`${API_BASE_URL}/Post/Get-all-post-admin?${queryString}`);
 }
 export const putPost = (id, {title, description, address, price, area, status, isHire, categoryids})  =>{
   return axios.put(`${API_BASE_URL}/Post/update-basic/?id=${id}`, {
