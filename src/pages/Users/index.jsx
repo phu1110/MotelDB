@@ -44,13 +44,14 @@ function Users() {
                 ...editingUser,
                 gender: editingUser.gender === 'true',
             });
-            setIsEditing(false);
+            
             toast.success('Thông tin đã được cập nhật', {
                 position: 'top-right',
                 autoClose: 3000, // Đóng thông báo sau 3 giây
                 hideProgressBar: false,
 
             });
+            setIsEditing(false);
             const updatedUsers = users.map((user) =>
                 user.id === editingUser.id ? editingUser : user
             );
@@ -82,12 +83,35 @@ function Users() {
 
     useEffect(() => {
         fetchData(currentPage, filterOn, filterQuery);
-    }, []);
+    }, [currentPage, filterOn, filterQuery]);
     const handleDelete = (userId) => {
         // Hiển thị toast để xác nhận trước khi xóa
         toast.info(
             <ConfirmationModal
-                handleDeleteConfirmed={() => handleDeleteConfirmed(userId)}
+            handleDeleteConfirmed={() => handleDeleteConfirmed(userId)}
+            hideToast={hideToast}
+        />,
+        {
+            position: 'top-right',
+            autoClose: false,
+            hideProgressBar: true,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+             // Đóng toast khi nó được đóng
+        }
+        );
+    };
+
+    const handleDeleteConfirmed = async (userId) => {
+        // Gửi yêu cầu xóa đến API
+        try {
+            await deleteUser(userId);
+            const updatedUsers = users.filter((user) => user.id !== userId);
+            setUsers(updatedUsers);
+            toast.info(
+                <ConfirmationModal
                 hideToast={hideToast}
             />,
             {
@@ -98,23 +122,31 @@ function Users() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
+                onClose: hideToast
             }
-        );
-    };
-
-    const handleDeleteConfirmed = async (userId) => {
-        // Gửi yêu cầu xóa đến API
-        try {
-            await deleteUser(userId);
-            const updatedUsers = users.filter((user) => user.id !== userId);
-            setUsers(updatedUsers);
-
+            );
             toast.success('Xóa dữ liệu thành công', {
                 position: 'top-right',
                 autoClose: 3000,
                 hideProgressBar: false,
             });
+            
         } catch (error) {
+            toast.info(
+                <ConfirmationModal
+                hideToast={hideToast}
+            />,
+            {
+                position: 'top-right',
+                autoClose: false,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                onClose: hideToast
+            }
+            );
             toast.error('Xóa dữ liệu không thành công', {
                 position: 'top-right',
                 autoClose: 3000,
@@ -240,15 +272,17 @@ function Users() {
                 </div>
 
                 <UserList users={users} handleEdit={handleEdit} handleDelete={handleDelete} />
-                <UserForm
-                    editingUser={editingUser}
-                    isEditing={isEditing}
-                    setEditingUser={setEditingUser}
-                    handleSave={handleSave}
-                    handleCancel={handleCancel}
-                    roles={roles}
-                    tiers={tiers}
-                />
+                {isEditing && (
+                    <UserForm
+                        editingUser={editingUser}
+                        isEditing={isEditing}
+                        setEditingUser={setEditingUser}
+                        handleSave={handleSave}
+                        handleCancel={handleCancel}
+                        roles={roles}
+                        tiers={tiers}
+                    />
+                )}
                 <Pagination totalPages={totalPages} handlePageClick={handlePageClick} />
                 <div className="flex items-center space-x-4 mt-4">
                     <TextField
