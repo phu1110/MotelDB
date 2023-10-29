@@ -245,28 +245,23 @@ function Users() {
 
     return (
         <div className='dashboard-content'>
-            <DashboardHeader btnText={'Thêm người dùng'} />
+            <DashboardHeader  />
 
             <div className='dashboard-content-container  relative'>
 
                 <div className='dashboard-content-header'>
                     <h2 className='text-black'>Danh Sách Người Dùng</h2>
+                    
+                    <div className='dashboard-content-search'>
                     <CSVLink
                         data={DataExport}
                         filename={"users.csv"}
-                        className="btn bg-green-400"
+                        className="btn bg-green-400 "
                         asyncOnClick={true}
                         onClick={getUsersExport}
                     >
                         <i class="fa-solid fa-download"></i> Tải xuống
                     </CSVLink>
-                    <div className='dashboard-content-search'>
-                        {/* <input
-                            type='text'
-                            value={search}
-                            placeholder='tìm kiếm..'
-                            className='dashboard-content-input'
-                            onChange={e => __handleSearch(e)} /> */}
                     </div>
 
                 </div>

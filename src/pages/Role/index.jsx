@@ -6,7 +6,7 @@ function Role() {
     return (
         <Container maxWidth="xl">
             <div className='dashboard-content'>
-                <DashboardHeader btnText="Thêm người dùng" />
+                <DashboardHeader />
                 <DataGridRole />
             </div>
         </Container>

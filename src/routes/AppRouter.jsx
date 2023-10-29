@@ -12,6 +12,7 @@ import Role from '../pages/Role';
 import DetailsUser from '../components/Users/Details_User';
 import Tiers from '../pages/Tiers/Tier';
 import DetailTier from '../components/Tier/DetailTier';
+import Totalchart from '../pages/Chart/totalchart';
 const AppRouter = () => {
   return (
     <Router>
@@ -20,7 +21,7 @@ const AppRouter = () => {
   
         <Route
           path="/"
-          element={<PrivateRoute><div></div></PrivateRoute>}
+          element={<PrivateRoute><Totalchart /></PrivateRoute>}
         />
         <Route
           path="/users"

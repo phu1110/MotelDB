@@ -103,7 +103,9 @@ function Users() {
                 autoClose: 3000,
                 hideProgressBar: false,
             });
+            
         }
+        const hide={hideToast}
     };
     const hideToast = () => {
         // Ẩn toast nếu người dùng hủy bỏ
@@ -139,7 +141,7 @@ function Users() {
     }
     return (
         <div className='dashboard-content'>
-            <DashboardHeader btnText="Thêm người dùng" />
+            <DashboardHeader  />
 
             <div className='dashboard-content-container  relative'>
                 <div className='dashboard-content-header'>

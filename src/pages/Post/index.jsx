@@ -66,7 +66,7 @@ function Post() {
                 )}
                 <PostTable />
             </div> */}
-            <DashboardHeader btnText="Thêm người dùng"/>
+            <DashboardHeader />
             <DataGridPost/>
         </div>
         </Container>

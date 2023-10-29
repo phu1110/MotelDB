@@ -13,8 +13,8 @@ function DashboardHeader ({ btnText, onClick }) {
                 <button className='dashbord-header-btn' onClick={onClick}>{btnText}</button>
             }
 
-            <div className='dashbord-header-right'>
-                {user && user.firstname && <span> Chào mừng {user.lastname + " " + user.firstname}</span>}
+            <div className='dashbord-header-right gap-2'>
+                {user && user.firstname && <span> Chào mừng {user.firstname + " " + user.lastname}</span>}
                 {/* <img 
                     src={NotificationIcon}
                     alt='notification-icon'

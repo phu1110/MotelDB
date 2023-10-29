@@ -18,6 +18,9 @@ export const getUsers = (currentPage, filterOn, filterQuery) => {
   );
 };
 
+export const getAll = () => {
+  return axios.get(`${API_BASE_URL}/User/get-all`);
+};
 export const getTiers = (currentPage) => {
   return axios.get(`${API_BASE_URL}/Tiers/get-all-tier?pageNumber=${currentPage}&pageSize=5`);
 };

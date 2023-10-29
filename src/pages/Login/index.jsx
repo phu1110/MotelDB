@@ -105,7 +105,7 @@ const Login = () => {
             onChange={(event) => setPassword(event.target.value)}
             />
           </div>
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input id="remember_me" name="remember_me" type="checkbox" className="h-4 w-4 bg-blue-500 focus:ring-blue-400 border-gray-300 rounded" />
               <label htmlFor="remember_me" className="ml-2 block text-sm text-gray-800">
@@ -117,7 +117,7 @@ const Login = () => {
                 Forgot your password?
               </Link>
             </div>
-          </div>
+          </div> */}
           <div>
             <button className="w-full flex gap-2 justify-center items-center bg-green-400  hover:bg-green-500 text-gray-100 p-3  rounded-full tracking-wide font-semibold  shadow-lg cursor-pointer transition ease-in duration-500"
             onClick={() => handleLogin()}>
