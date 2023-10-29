@@ -46,9 +46,9 @@ const DetailsUser = () => {
     fetchUserDetails();
   }, [id]);
              
-  const calculateElapsedTime = (post) => {
-    if (post && post.datecreatedroom) {
-      const postDate = moment(post.datecreatedroom);
+  const calculateElapsedTime = (posts) => {
+    if (posts && posts.dateCreated) {
+      const postDate = moment(posts.dateCreated);
       const currentDate = moment();
 
       const hoursDiff = currentDate.diff(postDate, 'hours');
@@ -159,7 +159,7 @@ const DetailsUser = () => {
                                    </td>
                                    <td><span>{calculateElapsedTime(post)}</span></td>
                                    <td><span>{post.address}</span></td>
-                                   <td><span>{post.isHire ? "Đã được thuê" : "chưa được thuê"}</span></td>
+                                   <td><span>{post.isHire}</span></td>
                                    <td><span>{post.price}</span></td>
                                    <td><span>{post.area}m²</span></td>
                                </tr>
